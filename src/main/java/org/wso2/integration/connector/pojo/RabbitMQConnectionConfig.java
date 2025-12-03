@@ -19,6 +19,8 @@ package org.wso2.integration.connector.pojo;
 
 import com.rabbitmq.client.amqp.ConnectionSettings;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.wso2.integration.connector.exception.RabbitMQConnectorException;
 
 import java.time.Duration;
@@ -43,6 +45,8 @@ import static org.wso2.integration.connector.utils.RabbitMQConstants.DEFAULT_VIR
  * RabbitMQ connection settings effectively.
  */
 public class RabbitMQConnectionConfig {
+    private static final Log log = LogFactory.getLog(RabbitMQConnectionConfig.class);
+
     private String[] serverUrls;
     private String saslMechanism;
     private Boolean oAuth2Enabled;
@@ -247,10 +251,18 @@ public class RabbitMQConnectionConfig {
      * @param connectionIdleTimeout The idle timeout as a string.
      */
     public void setConnectionIdleTimeout(String connectionIdleTimeout) {
-        if (StringUtils.isNotEmpty(connectionIdleTimeout)) {
-            this.connectionIdleTimeout = Duration.ofMillis(Long.parseLong(connectionIdleTimeout));
+        this.connectionIdleTimeout = Duration.ofMillis(DEFAULT_IDLE_TIMEOUT);
+        if (connectionIdleTimeout != null) {
+            try {
+                this.connectionIdleTimeout =
+                        Duration.ofMillis(Long.parseLong(connectionIdleTimeout));
+            } catch (NumberFormatException e) {
+                log.error("Invalid connection idle timeout value '"
+                        + connectionIdleTimeout + "', using default: " + DEFAULT_IDLE_TIMEOUT, e);
+            }
         } else {
-            this.connectionIdleTimeout = Duration.ofMillis(DEFAULT_IDLE_TIMEOUT);
+            log.warn("Connection idle timeout property is not set, using default: "
+                    + DEFAULT_IDLE_TIMEOUT);
         }
     }
 
@@ -270,13 +282,21 @@ public class RabbitMQConnectionConfig {
      * @param connectionEstablishRetryCount The retry count as a string.
      */
     public void setConnectionEstablishRetryCount(String connectionEstablishRetryCount) {
+        this.connectionEstablishRetryCount = DEFAULT_RETRY_COUNT;
         // Check if the input string is not empty
         if (StringUtils.isNotEmpty(connectionEstablishRetryCount)) {
-            // Parse the string to an integer and set the retry count
-            this.connectionEstablishRetryCount = Integer.parseInt(connectionEstablishRetryCount);
+            // Parse the string to a long value and set the retry interval
+            try {
+                this.connectionEstablishRetryCount =
+                        Integer.parseInt(connectionEstablishRetryCount);
+            } catch (NumberFormatException e) {
+                log.error("Invalid connection establish retry count value '"
+                        + connectionEstablishRetryCount + "', using default: "
+                        + DEFAULT_RETRY_COUNT, e);
+            }
         } else {
-            // Default to the predefined retry count
-            this.connectionEstablishRetryCount = DEFAULT_RETRY_COUNT;
+            log.warn("Connection establish retry count property is not set, using default: "
+                    + DEFAULT_RETRY_COUNT);
         }
     }
 
@@ -296,13 +316,21 @@ public class RabbitMQConnectionConfig {
      * @param connectionEstablishRetryInterval The retry interval as a string.
      */
     public void setConnectionEstablishRetryInterval(String connectionEstablishRetryInterval) {
+        this.connectionEstablishRetryInterval = DEFAULT_RETRY_INTERVAL;
         // Check if the input string is not empty
         if (StringUtils.isNotEmpty(connectionEstablishRetryInterval)) {
             // Parse the string to a long value and set the retry interval
-            this.connectionEstablishRetryInterval = Long.parseLong(connectionEstablishRetryInterval);
+            try {
+                this.connectionEstablishRetryInterval =
+                        Long.parseLong(connectionEstablishRetryInterval);
+            } catch (NumberFormatException e) {
+                log.error("Invalid connection establish retry interval value '"
+                        + connectionEstablishRetryInterval + "', using default: "
+                        + DEFAULT_RETRY_INTERVAL, e);
+            }
         } else {
-            // Default to the predefined retry interval
-            this.connectionEstablishRetryInterval = DEFAULT_RETRY_INTERVAL;
+            log.warn("Connection establish retry interval property is not set, using default: "
+                    + DEFAULT_RETRY_INTERVAL);
         }
     }
 
@@ -349,15 +377,19 @@ public class RabbitMQConnectionConfig {
      * @param connectionRecoveryInitialDelay The initial delay as a string.
      */
     public void setConnectionRecoveryInitialDelay(String connectionRecoveryInitialDelay) {
-        // Check if the input string is not empty
-        if (StringUtils.isNotEmpty(connectionRecoveryInitialDelay)) {
-            // Parse the string to a `Duration` object and set the initial delay
-            this.connectionRecoveryInitialDelay = Duration.ofMillis(
-                    Long.parseLong(connectionRecoveryInitialDelay));
+        this.connectionRecoveryInitialDelay = Duration.ofMillis(DEFAULT_CONNECTION_RECOVERY_INITIAL_DELAY);
+        if (connectionRecoveryInitialDelay != null) {
+            try {
+                this.connectionRecoveryInitialDelay =
+                        Duration.ofMillis(Long.parseLong(connectionRecoveryInitialDelay));
+            } catch (NumberFormatException e) {
+                log.error("Invalid connection recovery initial delay value '"
+                        + connectionRecoveryInitialDelay + "', using default: "
+                        + DEFAULT_CONNECTION_RECOVERY_INITIAL_DELAY, e);
+            }
         } else {
-            // Default to the predefined initial delay
-            this.connectionRecoveryInitialDelay = Duration.ofMillis(
-                    DEFAULT_CONNECTION_RECOVERY_INITIAL_DELAY);
+            log.warn("Connection recovery initial delay property is not set, using default: "
+                    + DEFAULT_CONNECTION_RECOVERY_INITIAL_DELAY);
         }
     }
 
@@ -377,15 +409,19 @@ public class RabbitMQConnectionConfig {
      * @param connectionRecoveryInterval The recovery interval as a string.
      */
     public void setConnectionRecoveryInterval(String connectionRecoveryInterval) {
-        // Check if the input string is not empty
-        if (StringUtils.isNotEmpty(connectionRecoveryInterval)) {
-            // Parse the string to a `Duration` object and set the recovery interval
-            this.connectionRecoveryInterval = Duration.ofMillis(
-                    Long.parseLong(connectionRecoveryInterval));
+        this.connectionRecoveryInterval = Duration.ofMillis(DEFAULT_CONNECTION_RECOVERY_RETRY_INTERVAL);
+        if (connectionRecoveryInterval != null) {
+            try {
+                this.connectionRecoveryInterval =
+                        Duration.ofMillis(Long.parseLong(connectionRecoveryInterval));
+            } catch (NumberFormatException e) {
+                log.error("Invalid connection recovery retry interval value '"
+                        + connectionRecoveryInterval + "', using default: "
+                        + DEFAULT_CONNECTION_RECOVERY_RETRY_INTERVAL, e);
+            }
         } else {
-            // Default to the predefined recovery interval
-            this.connectionRecoveryInterval = Duration.ofMillis(
-                    DEFAULT_CONNECTION_RECOVERY_RETRY_INTERVAL);
+            log.warn("Connection recovery initial retry interval property is not set, using default: "
+                    + DEFAULT_CONNECTION_RECOVERY_RETRY_INTERVAL);
         }
     }
 
@@ -405,15 +441,19 @@ public class RabbitMQConnectionConfig {
      * @param connectionRecoveryTimeout The recovery timeout as a string.
      */
     public void setConnectionRecoveryTimeout(String connectionRecoveryTimeout) {
-        // Check if the input string is not empty
-        if (StringUtils.isNotEmpty(connectionRecoveryTimeout)) {
-            // Parse the string to a `Duration` object and set the recovery timeout
-            this.connectionRecoveryTimeout = Duration.ofMillis(
-                    Long.parseLong(connectionRecoveryTimeout));
+        this.connectionRecoveryTimeout = Duration.ofMillis(DEFAULT_CONNECTION_RECOVERY_RETRY_TIMEOUT);
+        if (connectionRecoveryTimeout != null) {
+            try {
+                this.connectionRecoveryTimeout =
+                        Duration.ofMillis(Long.parseLong(connectionRecoveryTimeout));
+            } catch (NumberFormatException e) {
+                log.error("Invalid connection recovery retry timeout value '"
+                        + connectionRecoveryTimeout + "', using default: "
+                        + DEFAULT_CONNECTION_RECOVERY_RETRY_TIMEOUT, e);
+            }
         } else {
-            // Default to the predefined recovery timeout
-            this.connectionRecoveryTimeout = Duration.ofMillis(
-                    DEFAULT_CONNECTION_RECOVERY_RETRY_TIMEOUT);
+            log.warn("Connection recovery initial retry timeout property is not set, using default: "
+                    + DEFAULT_CONNECTION_RECOVERY_RETRY_TIMEOUT);
         }
     }
 }

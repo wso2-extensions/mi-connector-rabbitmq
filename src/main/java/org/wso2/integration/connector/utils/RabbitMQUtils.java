@@ -886,6 +886,7 @@ public class RabbitMQUtils {
                 axis2smc.getAxis2MessageContext();
         if (axis2MessageContext.getProperty(org.apache.axis2.context.MessageContext.TRANSPORT_HEADERS) == null) {
             Map<String, Object> headersMap = new TreeMap(new Comparator<String>() {
+                @Override
                 public int compare(String o1, String o2) {
                     return o1.compareToIgnoreCase(o2);
                 }

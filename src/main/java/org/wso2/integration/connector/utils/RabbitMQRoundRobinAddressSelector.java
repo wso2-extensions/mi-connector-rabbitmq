@@ -43,7 +43,7 @@ public class RabbitMQRoundRobinAddressSelector implements AddressSelector {
     public Address select(List<Address> addresses) {
         if (addresses.isEmpty()) {
             // Throw an exception if no addresses are available
-            throw new IllegalStateException("There should at least one node to connect to");
+            throw new IllegalStateException("There should be at least one node to connect to");
         } else if (addresses.size() == 1) {
             // If there is only one address, select it directly
             this.address = addresses.get(0);

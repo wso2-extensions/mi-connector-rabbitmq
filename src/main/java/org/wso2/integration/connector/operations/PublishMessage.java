@@ -287,7 +287,7 @@ public class PublishMessage extends AbstractConnectorOperation {
         ClientKey key = new ClientKey(queue, exchange, routingKey, null);
         if (queue == null && exchange == null && routingKey == null) {
             throw new SynapseException("Publisher client initialization failed due to insufficient information." +
-                    "Provide at least one: Queue, Exchange, or Routing Key.");
+                    " Provide at least one: Queue, Exchange, or Routing Key.");
         }
         if (exchangeType == null) {
             exchangeType = DEFAULT_EXCHANGE_TYPE;

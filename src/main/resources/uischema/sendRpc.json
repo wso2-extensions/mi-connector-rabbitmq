@@ -111,7 +111,7 @@
                   "value": {
                     "name": "headers",
                     "displayName": "Request Headers",
-                    "description": "Key value pairs fo headers",
+                    "description": "Key value pairs for headers",
                     "tableKey": "propertyName",
                     "tableValue": "propertyValue",
                     "elements": [
