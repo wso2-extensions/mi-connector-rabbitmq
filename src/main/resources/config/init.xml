@@ -1,0 +1,83 @@
+<!--
+~  Copyright (c) 2025, WSO2 LLC. (http://wso2.com) All Rights Reserved.
+~
+~  WSO2 LLC. licenses this file to you under the Apache License,
+~  Version 2.0 (the "License"); you may not use this file except
+~  in compliance with the License.
+~  You may obtain a copy of the License at
+~
+~   http://www.apache.org/licenses/LICENSE-2.0
+~
+~  Unless required by applicable law or agreed to in writing,
+~  software distributed under the License is distributed on an
+~  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+~  KIND, either express or implied.  See the License for the
+~  specific language governing permissions and limitations
+~  under the License.
+-->
+
+<template xmlns="http://ws.apache.org/ns/synapse" name="init">
+    <parameter name="name" description="Unique name to identify the connection by."/>
+    <parameter name="serverUrls" description="RabbitMQ broker URLs listed as a comma-separated list (e.g., host1:port1,host2:port2)."/>
+    <parameter name="saslMechanism" description="The SASL mechanism for connection authentication."/>
+    <parameter name="oAuth2Enabled" description="Enable OAuth 2.0 (e.g., Client Credentials or Password Grant) for authentication."/>
+    <parameter name="username" description="Username for PLAIN authentication."/>
+    <parameter name="password" description="Password for PLAIN authentication."/>
+    <parameter name="tokenEndpoint" description="The Identity Provider/Token Service token endpoint URL to generate the access token."/>
+    <parameter name="grantType" description="The grant type to use for token generation."/>
+    <parameter name="clientId" description="The client ID for token generation."/>
+    <parameter name="clientSecret" description="The client secret for token generation."/>
+    <parameter name="oAuth2UserName" description="The username required for the **password** grant type."/>
+    <parameter name="oAuth2Password" description="The password required for the **password** grant type."/>
+    <parameter name="sslEnabled" description="Enable SSL/TLS for the RabbitMQ connection."/>
+    <parameter name="trustEverything" description="Accept all server certificates, regardless of validity. **Not recommended for production.**"/>
+    <parameter name="keyStoreLocation" description="The file path to the Keystore containing the client's private key and certificate."/>
+    <parameter name="keyStoreType" description="The type of the Keystore (e.g., JKS)."/>
+    <parameter name="keyStorePassword" description="The password to access the Keystore."/>
+    <parameter name="trustStoreLocation" description="The file path to the Truststore containing trusted server certificates."/>
+    <parameter name="trustStoreType" description="The type of the Truststore (e.g., JKS)."/>
+    <parameter name="trustStorePassword" description="The password to access the Truststore."/>
+    <parameter name="sslVersion" description="The preferred SSL/TLS protocol version (e.g., 'TLSv1.2', 'TLSv1.3')."/>
+    <parameter name="hostnameVerificationEnabled" description="If enabled, verifies the hostname in the server's certificate against the connected host name."/>
+    <parameter name="virtualHost" description="The virtual host (vhost) to connect to. Leave blank for the default '/' vhost."/>
+    <parameter name="connectionIdleTimeout" description="The maximum period (in milliseconds) the connection can remain idle before closing."/>
+    <parameter name="connectionEstablishRetryCount" description="The number of times to retry establishing the connection. Leave blank for default."/>
+    <parameter name="connectionEstablishRetryInterval" description="The interval (in milliseconds) between connection establishment retries."/>
+    <parameter name="connectionRecoveryPolicyType" description="Defines the strategy for automatic connection recovery after disconnection."/>
+    <parameter name="connectionRecoveryInitialDelay" description="The initial delay (in milliseconds) before the first recovery attempt starts."/>
+    <parameter name="connectionRecoveryInterval" description="The fixed interval (in milliseconds) between connection recovery retries."/>
+    <parameter name="connectionRecoveryTimeout" description="The total time (in milliseconds) allowed for the connection recovery process before giving up."/>
+    <sequence>
+        <property expression="$func:name" name="name"/>
+        <property expression="$func:serverUrls" name="serverUrls"/>
+        <property expression="$func:saslMechanism" name="saslMechanism"/>
+        <property expression="$func:oAuth2Enabled" name="oAuth2Enabled"/>
+        <property expression="$func:username" name="username"/>
+        <property expression="$func:password" name="password"/>
+        <property expression="$func:tokenEndpoint" name="tokenEndpoint"/>
+        <property expression="$func:grantType" name="grantType"/>
+        <property expression="$func:clientId" name="clientId"/>
+        <property expression="$func:clientSecret" name="clientSecret"/>
+        <property expression="$func:oAuth2UserName" name="oAuth2UserName"/>
+        <property expression="$func:oAuth2Password" name="oAuth2Password"/>
+        <property expression="$func:sslEnabled" name="sslEnabled"/>
+        <property expression="$func:trustEverything" name="trustEverything"/>
+        <property expression="$func:keyStoreLocation" name="keyStoreLocation"/>
+        <property expression="$func:keyStoreType" name="keyStoreType"/>
+        <property expression="$func:keyStorePassword" name="keyStorePassword"/>
+        <property expression="$func:trustStoreLocation" name="trustStoreLocation"/>
+        <property expression="$func:trustStoreType" name="trustStoreType"/>
+        <property expression="$func:trustStorePassword" name="trustStorePassword"/>
+        <property expression="$func:sslVersion" name="sslVersion"/>
+        <property expression="$func:hostnameVerificationEnabled" name="hostnameVerificationEnabled"/>
+        <property expression="$func:virtualHost" name="virtualHost"/>
+        <property expression="$func:connectionIdleTimeout" name="connectionIdleTimeout"/>
+        <property expression="$func:connectionEstablishRetryCount" name="connectionEstablishRetryCount"/>
+        <property expression="$func:connectionEstablishRetryInterval" name="connectionEstablishRetryInterval"/>
+        <property expression="$func:connectionRecoveryPolicyType" name="connectionRecoveryPolicyType"/>
+        <property expression="$func:connectionRecoveryInitialDelay" name="connectionRecoveryInitialDelay"/>
+        <property expression="$func:connectionRecoveryInterval" name="connectionRecoveryInterval"/>
+        <property expression="$func:connectionRecoveryTimeout" name="connectionRecoveryTimeout"/>
+        <class name="org.wso2.integration.connector.RabbitMQConfig"/>
+    </sequence>
+</template>
