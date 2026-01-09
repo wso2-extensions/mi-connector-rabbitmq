@@ -1,0 +1,515 @@
+{
+  "connectorName": "rabbitmq",
+  "operationName": "publishMessage",
+  "title": "Publish Message",
+  "help": "The publishMessage operation allows you to publish messages to the RabbitMQ brokers via queue/exchange.</b>",
+  "elements": [
+    {
+      "type": "attributeGroup",
+      "value": {
+        "groupName": "publishMessage",
+        "elements": [
+          {
+            "type": "attribute",
+            "value": {
+              "name": "configRef",
+              "displayName": "Connection",
+              "inputType": "connection",
+              "allowedConnectionTypes": [
+                "rabbitmq"
+              ],
+              "defaultType": "connection.rabbitmq",
+              "defaultValue": "",
+              "required": "true",
+              "helpTip": "Connection to be used"
+            }
+          },
+          {
+            "type": "attributeGroup",
+            "value": {
+              "groupName": "Basic",
+              "elements": [
+                {
+                  "type": "attribute",
+                  "value": {
+                    "name": "queue",
+                    "displayName": "Queue",
+                    "inputType": "stringOrExpression",
+                    "defaultValue": "",
+                    "required": "false",
+                    "helpTip": "The name of the Queue."
+                  }
+                },
+                {
+                  "type": "attribute",
+                  "value": {
+                    "name": "queueType",
+                    "displayName": "Queue Type",
+                    "inputType": "combo",
+                    "comboValues": [
+                      "CLASSIC",
+                      "QUORUM",
+                      "STREAM"
+                    ],
+                    "defaultValue": "CLASSIC",
+                    "required": "false",
+                    "helpTip": "Select the type of RabbitMQ queue to interact with: Classic, Quorum (for high availability), or Stream (for large, continuous message flows)."
+                  }
+                },
+                {
+                  "type": "attribute",
+                  "value": {
+                    "name": "queueAutoDeclare",
+                    "displayName": "Queue Auto Declare",
+                    "inputType": "checkbox",
+                    "defaultValue": true,
+                    "required": "false",
+                    "helpTip": "If enabled, the connector will attempt to declare the specified queue on the RabbitMQ server if it doesn't already exist."
+                  }
+                },
+                {
+                  "type": "attribute",
+                  "value": {
+                    "name": "exchange",
+                    "displayName": "Exchange Name",
+                    "inputType": "stringOrExpression",
+                    "defaultValue": "",
+                    "required": "false",
+                    "helpTip": "The name of the exchange to bind the queue to. Leave empty to publish directly to the queue via default exchange."
+                  }
+                },
+                {
+                  "type": "attribute",
+                  "value": {
+                    "name": "exchangeType",
+                    "displayName": "Exchange Type",
+                    "inputType": "combo",
+                    "comboValues": [
+                      "DIRECT",
+                      "FANOUT",
+                      "TOPIC",
+                      "HEADERS"
+                    ],
+                    "defaultValue" : "DIRECT",
+                    "required": "false",
+                    "helpTip": "The type of the RabbitMQ exchange: **DIRECT**, **FANOUT** (broadcast), **TOPIC** (wildcard routing), or **HEADERS** (attribute matching)."
+                  }
+                },
+                {
+                  "type": "attribute",
+                  "value": {
+                    "name": "exchangeAutoDeclare",
+                    "displayName": "Exchange Auto Declare",
+                    "inputType": "checkbox",
+                    "defaultValue": true,
+                    "required": "false",
+                    "helpTip": "If enabled, the connector will attempt to declare the specified exchange on the RabbitMQ server if it doesn't already exist."
+                  }
+                },
+                {
+                  "type": "attribute",
+                  "value": {
+                    "name": "routingKey",
+                    "displayName": "Routing Key",
+                    "inputType": "stringOrExpression",
+                    "defaultValue": "",
+                    "required": "false",
+                    "enableCondition": ["OR",{"exchangeType":"DIRECT"},{"exchangeType":"TOPIC"}],
+                    "helpTip": "Specify a routing key when binding a queue to a **DIRECT** or **TOPIC** exchange. If omitted, the queue name will be used as the routing key."
+                  }
+                },
+                {
+                  "type": "table",
+                  "value": {
+                    "name": "headers",
+                    "displayName": "Headers",
+                    "description": "Key value pairs for headers",
+                    "tableKey": "propertyName",
+                    "tableValue": "propertyValue",
+                    "elements": [
+                      {
+                        "type": "attribute",
+                        "value": {
+                          "name": "propertyName",
+                          "displayName": "Name",
+                          "inputType": "string",
+                          "required": false,
+                          "helpTip": ""
+                        }
+                      },
+                      {
+                        "type": "attribute",
+                        "value": {
+                          "name": "propertyValue",
+                          "displayName": "Value",
+                          "inputType": "stringOrExpression",
+                          "required": false,
+                          "helpTip": ""
+                        }
+                      }
+                    ]
+                  }
+                },
+                {
+                  "type": "attribute",
+                  "value": {
+                    "name": "requestBodyType",
+                    "displayName": "Content Type",
+                    "inputType": "combo",
+                    "defaultValue": "JSON",
+                    "required": "false",
+                    "comboValues": [
+                      "JSON",
+                      "XML",
+                      "TEXT"
+                    ],
+                    "helpTip": ""
+                  }
+                },
+                {
+                  "type": "attribute",
+                  "value": {
+                    "name": "requestBodyJson",
+                    "displayName": "Request Body",
+                    "inputType": "expressionTextArea",
+                    "defaultValue": "${payload}",
+                    "required": "false",
+                    "helpTip": "",
+                    "enableCondition": [
+                      {
+                        "requestBodyType": "JSON"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "type": "attribute",
+                  "value": {
+                    "name": "requestBodyXml",
+                    "displayName": "Request Body",
+                    "inputType": "expressionTextArea",
+                    "defaultValue": "${xpath('$body/node()')}",
+                    "required": "false",
+                    "helpTip": "",
+                    "enableCondition": [
+                      {
+                        "requestBodyType": "XML"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "type": "attribute",
+                  "value": {
+                    "name": "requestBodyText",
+                    "displayName": "Request Body",
+                    "inputType": "expressionTextArea",
+                    "defaultValue": "${xpath('$body/node()')}",
+                    "required": "false",
+                    "helpTip": "",
+                    "enableCondition": [
+                      {
+                        "requestBodyType": "TEXT"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "type": "attribute",
+                  "value": {
+                    "name": "publisherConfirms",
+                    "displayName": "Publisher Confirms",
+                    "inputType": "checkbox",
+                    "defaultValue": true,
+                    "required": "false",
+                    "helpTip": "Enable publisher confirms to ensure message delivery acknowledgment from the RabbitMQ broker."
+
+                  }
+                },
+                {
+                  "type": "attribute",
+                  "value": {
+                    "name": "publishTimeout",
+                    "displayName": "Publish Timeout (ms)",
+                    "inputType": "stringOrExpression",
+                    "defaultValue": "60000",
+                    "required": "false",
+                    "helpTip": "The maximum time (in milliseconds) to wait for the message to be published before timing out."
+
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "type": "attributeGroup",
+            "value": {
+              "groupName": "Queue Properties",
+              "isCollapsed": "true",
+              "enableCondition": [{"queueAutoDeclare": true}],
+              "elements": [
+                {
+                  "type": "attribute",
+                  "value": {
+                    "name": "queueArguments",
+                    "displayName": "Queue Arguments",
+                    "inputType": "stringOrExpression",
+                    "defaultValue": "",
+                    "required": "false",
+                    "enableCondition": [{"queueAutoDeclare": true}],
+                    "helpTip": "Additional arguments (comma-separated key=value pairs) to use when declaring the queue, e.g., for setting policy attributes like message-ttl or max-length."
+                  }
+                },
+                {
+                  "type": "attribute",
+                  "value": {
+                    "name": "rabbitmq.classic.version",
+                    "displayName": "Queue Version",
+                    "inputType": "combo",
+                    "comboValues": [
+                      "V1",
+                      "V2"
+                    ],
+                    "defaultValue": "",
+                    "required": "false",
+                    "enableCondition": ["AND", {"queueType": "CLASSIC"}, {"queueAutoDeclare": true}],
+                    "helpTip": "For Classic Queues, select the queue version (V1 or V2). V2 offers better performance and scale."
+                  }
+                },
+                {
+                  "type": "attribute",
+                  "value": {
+                    "name": "maxPriority",
+                    "displayName": "Queue Max Priority",
+                    "inputType": "stringOrExpression",
+                    "defaultValue": "",
+                    "required": "false",
+                    "enableCondition": ["AND", {"queueType": "CLASSIC"}, {"queueAutoDeclare": true}],
+                    "helpTip": "For Classic Queues: the maximum priority level the queue should support (0-255). Requires setting 'x-max-priority' in queue arguments."
+                  }
+                },
+                {
+                  "type": "attribute",
+                  "value": {
+                    "name": "initialMemberCount",
+                    "displayName": "Queue Initial Member Count",
+                    "inputType": "stringOrExpression",
+                    "defaultValue": "",
+                    "required": "false",
+                    "enableCondition": ["AND", {"queueType": "QUORUM"}, {"queueAutoDeclare": true}],
+                    "helpTip": "For Quorum Queues: the initial number of replica nodes required for the queue."
+                  }
+                },
+                {
+                  "type": "attribute",
+                  "value": {
+                    "name": "deliveryLimit",
+                    "displayName": "Queue Delivery Limit",
+                    "inputType": "stringOrExpression",
+                    "defaultValue": "",
+                    "required": "false",
+                    "enableCondition": ["AND", {"queueType": "QUORUM"}, {"queueAutoDeclare": true}],
+                    "helpTip": "For Quorum Queues: the maximum number of times a message can be redelivered to a consumer before being dead-lettered."
+                  }
+                },
+                {
+                  "type": "attribute",
+                  "value": {
+                    "name": "deadLetterStrategy",
+                    "displayName": "Quorum Queue Dead Letter Strategy",
+                    "inputType": "combo",
+                    "comboValues": [
+                      "AT_LEAST_ONCE",
+                      "AT_MOST_ONCE"
+                    ],
+                    "defaultValue": "",
+                    "required": "false",
+                    "enableCondition": ["AND", {"queueType": "QUORUM"}, {"queueAutoDeclare": true}],
+                    "helpTip": "For Quorum Queues: defines the acknowledgment and redelivery behavior for failed messages."
+                  }
+                },
+                {
+                  "type": "attribute",
+                  "value": {
+                    "name": "initialMemberCount",
+                    "displayName": "Queue Initial Member Count",
+                    "inputType": "stringOrExpression",
+                    "defaultValue": "",
+                    "required": "false",
+                    "enableCondition": ["AND", {"queueType": "STREAM"}, {"queueAutoDeclare": true}],
+                    "helpTip": "For STREAM queues: the initial number of stream members. Leave blank for default."
+                  }
+                },
+                {
+                  "type": "attribute",
+                  "value": {
+                    "name": "maxAge",
+                    "displayName": "Queue Max Age",
+                    "inputType": "stringOrExpression",
+                    "defaultValue": "",
+                    "required": "false",
+                    "enableCondition": ["AND", {"queueType": "STREAM"}, {"queueAutoDeclare": true}],
+                    "helpTip": "For STREAM queues: the maximum retention time for stream data (e.g., '7d' for 7 days). Old messages will be discarded."
+                  }
+                },
+                {
+                  "type": "attribute",
+                  "value": {
+                    "name": "maxSegmentSize",
+                    "displayName": "Queue Max Segment Size (Bytes)",
+                    "inputType": "stringOrExpression",
+                    "defaultValue": "",
+                    "required": "false",
+                    "enableCondition": ["AND", {"queueType": "STREAM"}, {"queueAutoDeclare": true}],
+                    "helpTip": "For STREAM queues: the maximum size (in bytes) of a single segment file within the stream storage."
+                  }
+                },
+                {
+                  "type": "attribute",
+                  "value": {
+                    "name": "queueExclusive",
+                    "displayName": "Queue Exclusive",
+                    "inputType": "checkbox",
+                    "defaultValue": false,
+                    "required": "false",
+                    "enableCondition": ["AND", {"queueType": "CLASSIC"}, {"queueAutoDeclare": true}],
+                    "helpTip": "If enabled, the queue will be deleted when the connection that declared it closes. Only one consumer can use an exclusive queue."
+                  }
+                },
+                {
+                  "type": "attribute",
+                  "value": {
+                    "name": "queueAutoDelete",
+                    "displayName": "Queue Auto Delete",
+                    "inputType": "checkbox",
+                    "defaultValue": false,
+                    "required": "false",
+                    "enableCondition": [{"queueAutoDeclare": true}],
+                    "helpTip": "If enabled, the queue will be automatically deleted when the last consumer disconnects from it."
+                  }
+                },
+                {
+                  "type": "attribute",
+                  "value": {
+                    "name": "queueOverflowStrategy",
+                    "displayName": "Queue Overflow Strategy",
+                    "inputType": "combo",
+                    "comboValues": [
+                      "DROP_HEAD",
+                      "REJECT_PUBLISH",
+                      "REJECT_PUBLISH_DLX"
+                    ],
+                    "defaultValue": "DROP_HEAD",
+                    "required": "false",
+                    "enableCondition": ["AND", {"queueAutoDeclare": true}, ["NOT", {"queueType": "STREAM"}]
+                    ],
+                    "helpTip": "Defines what happens when a queue reaches its maximum length: **DROP_HEAD** (oldest messages are discarded), **REJECT_PUBLISH** (new messages are rejected), or **REJECT_PUBLISH_DLX** (rejected and sent to the Dead Letter Exchange)."
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "type": "attributeGroup",
+            "value": {
+              "groupName": "Exchange Properties",
+              "isCollapsed": "true",
+              "enableCondition": [{"exchangeAutoDeclare": true}],
+              "elements": [
+                {
+                  "type": "attribute",
+                  "value": {
+                    "name": "exchangeArguments",
+                    "displayName": "Exchange Arguments",
+                    "inputType": "stringOrExpression",
+                    "defaultValue" : "",
+                    "required": "false",
+                    "enableCondition": [{"exchangeAutoDeclare":true}],
+                    "helpTip": "Additional arguments (as comma-separated key=value pairs) to use when declaring the exchange."
+                  }
+                },
+                {
+                  "type": "attribute",
+                  "value": {
+                    "name": "headerExchangeArguments",
+                    "displayName": "Header Exchange Binding Arguments",
+                    "inputType": "stringOrExpression",
+                    "defaultValue": "",
+                    "required": "false",
+                    "placeHolder" : "x-match=any,header1=value1,header2=value2",
+                    "enableCondition": ["AND",{"exchangeAutoDeclare":true},{"exchangeType":"HEADERS"}],
+                    "helpTip": "For **HEADERS** exchanges: set headers and values for the binding. Use `x-match=any` to match any header, or `x-match=all` to require all headers."
+                  }
+                },
+                {
+                  "type": "attribute",
+                  "value": {
+                    "name": "exchangeAutoDelete",
+                    "displayName": "Exchange Auto Delete",
+                    "inputType": "checkbox",
+                    "defaultValue": false,
+                    "required": "false",
+                    "enableCondition": [{"exchangeAutoDeclare":true}],
+                    "helpTip": "If enabled, the exchange will be automatically deleted when the last queue is unbound from it."
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "type": "attributeGroup",
+            "value": {
+              "groupName": "Other",
+              "isCollapsed": "true",
+              "elements": [
+                {
+                  "type": "attribute",
+                  "value": {
+                    "name": "requestCharSet",
+                    "displayName": "Request Content Encoding (Charset)",
+                    "inputType": "stringOrExpression",
+                    "defaultValue": "",
+                    "placeholder" : "UTF-8",
+                    "required": "false",
+                    "helpTip": "The content encoding/character set (e.g., UTF-8) used for the message body if the encoding/character set cannot be determined from the request message."
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "type": "attributeGroup",
+            "value": {
+              "groupName": "Output",
+              "elements": [
+                {
+                  "type": "attribute",
+                  "value": {
+                    "name": "responseVariable",
+                    "displayName": "Output Variable Name",
+                    "inputType": "string",
+                    "deriveResponseVariable": "true",
+                    "required": "true",
+                    "helpTip": "Name of the variable to which the output of the operation should be assigned"
+                  }
+                },
+                {
+                  "type": "attribute",
+                  "value": {
+                    "name": "overwriteBody",
+                    "displayName": "Overwrite Message Body",
+                    "inputType": "checkbox",
+                    "defaultValue": false,
+                    "hidden": true,
+                    "helpTip": "Replace the Message Body in Message Context with the output of the operation (This will remove the payload from the above variable).",
+                    "required": "false"
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

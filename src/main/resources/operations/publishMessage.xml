@@ -1,0 +1,62 @@
+<!--
+~  Copyright (c) 2025, WSO2 LLC. (http://wso2.com) All Rights Reserved.
+~
+~  WSO2 LLC. licenses this file to you under the Apache License,
+~  Version 2.0 (the "License"); you may not use this file except
+~  in compliance with the License.
+~  You may obtain a copy of the License at
+~
+~   http://www.apache.org/licenses/LICENSE-2.0
+~
+~  Unless required by applicable law or agreed to in writing,
+~  software distributed under the License is distributed on an
+~  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+~  KIND, either express or implied.  See the License for the
+~  specific language governing permissions and limitations
+~  under the License.
+-->
+
+<template xmlns="http://ws.apache.org/ns/synapse" name="publishMessage">
+    <parameter name="headers" description=""/>
+    <parameter name="requestBodyType" description=""/>
+    <parameter name="requestBodyJson" description=""/>
+    <parameter name="requestBodyXml" description=""/>
+    <parameter name="requestBodyText" description=""/>
+    <parameter name="requestCharSet" description=""/>
+
+    <parameter name="queue" description="The name of the Queue."/>
+    <parameter name="queueAutoDeclare" description="If enabled, the connector will attempt to declare the specified queue on the RabbitMQ server if it doesn't already exist."/>
+    <parameter name="queueType" description="Select the type of RabbitMQ queue to interact with: Classic, Quorum (for high availability), or Stream (for large, continuous message flows)."/>
+    <parameter name="queueArguments" description="Additional arguments (comma-separated key=value pairs) to use when declaring the queue, e.g., for setting policy attributes like message-ttl or max-length."/>
+    <parameter name="rabbitmq.classic.version" description="For Classic Queues, select the queue version (V1 or V2). V2 offers better performance and scale."/>
+    <parameter name="maxPriority" description="For Classic Queues: the maximum priority level the queue should support (0-255). Requires setting 'x-max-priority' in queue arguments."/>
+    <parameter name="initialMemberCount" description="For Quorum Queues: the initial number of replica nodes required for the queue."/>
+    <parameter name="deliveryLimit" description="For Quorum Queues: the maximum number of times a message can be redelivered to a consumer before being dead-lettered."/>
+    <parameter name="deadLetterStrategy" description="For Quorum Queues: defines the acknowledgment and redelivery behavior for failed messages."/>
+    <parameter name="maxAge" description="For STREAM queues: the maximum retention time for stream data (e.g., '7d' for 7 days). Old messages will be discarded."/>
+    <parameter name="maxSegmentSize" description="For STREAM queues: the maximum size (in bytes) of a single segment file within the stream storage."/>
+    <parameter name="queueExclusive" description="If enabled, the queue will be deleted when the connection that declared it closes. Only one consumer can use an exclusive queue."/>
+    <parameter name="queueAutoDelete" description="If enabled, the queue will be automatically deleted when the last consumer disconnects from it."/>
+    <parameter name="queueOverflowStrategy" description="Defines what happens when a queue reaches its maximum length: **DROP_HEAD** (oldest messages are discarded), **REJECT_PUBLISH** (new messages are rejected), or **REJECT_PUBLISH_DLX** (rejected and sent to the Dead Letter Exchange)."/>
+    <parameter name="exchange" description="The name of the exchange to bind the queue to. Leave empty to publish directly to the queue via default exchange."/>
+    <parameter name="exchangeAutoDeclare" description="If enabled, the connector will attempt to declare the specified exchange on the RabbitMQ server if it doesn't already exist."/>
+    <parameter name="exchangeType" description="The type of the RabbitMQ exchange: **DIRECT**, **FANOUT** (broadcast), **TOPIC** (wildcard routing), or **HEADERS** (attribute matching)."/>
+    <parameter name="routingKey" description="Specify a routing key when binding a queue to a **DIRECT** or **TOPIC** exchange. If omitted, the queue name will be used as the routing key."/>
+    <parameter name="exchangeArguments" description="Additional arguments (as comma-separated key=value pairs) to use when declaring the exchange."/>
+    <parameter name="headerExchangeArguments" description="For **HEADER** exchanges: set headers and values for the binding. Use \`x-match=any\` to match any header, or \`x-match=all\` to require all headers."/>
+    <parameter name="exchangeAutoDelete" description="If enabled, the exchange will be automatically deleted when the last queue is unbound from it."/>
+    <parameter name="publishTimeout" description="The maximum time (in milliseconds) to wait for the message to be published before timing out."/>
+    <parameter name="publisherConfirms" description="Enable publisher confirms to ensure message delivery acknowledgment from the RabbitMQ broker."/>
+    <parameter name="responseVariable" description="Name of the variable to which the output of the operation should be assigned"/>
+    <parameter name="overwriteBody" description="Replace the Message Body in Message Context with the output of the operation (This will remove the payload from the above variable)."/>
+    <sequence>
+        <property name="RABBITMQ_CONN_HEADERS" expression="$func:headers"/>
+        <property name="RABBITMQ_CONN_REQUEST_BODY_TYPE" expression="$func:requestBodyType"/>
+        <property name="RABBITMQ_CONN_REQUEST_BODY_JSON" expression="$func:requestBodyJson"/>
+        <property name="RABBITMQ_CONN_REQUEST_BODY_XML" expression="$func:requestBodyXml"/>
+        <property name="RABBITMQ_CONN_REQUEST_BODY_TEXT" expression="$func:requestBodyText"/>
+        <property name="RABBITMQ_CONN_REQUEST_CHARSET" expression="$func:requestCharSet"/>
+
+        <class name="org.wso2.integration.connector.operations.PublishMessage"/>
+    </sequence>
+</template>

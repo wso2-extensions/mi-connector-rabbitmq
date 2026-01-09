@@ -1,0 +1,42 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "title": "Output Schema for sendRpc Operation",
+  "description": "Output schema for the sendRpc operation in the connector.",
+  "properties": {
+    "payload": {
+      "type": "object",
+      "description": "The main response payload from the sendRpc operation.",
+      "properties": {
+        "error": {
+          "type": "object",
+          "description": "Error information if the operation was unsuccessful.",
+          "properties": {
+            "code": {
+              "type": "string",
+              "description": "Error code"
+            },
+            "message": {
+              "type": "string",
+              "description": "Error message"
+            },
+            "detail": {
+              "type": "string",
+              "description": "Additional error detail"
+            }
+          },
+          "required": ["code", "message"]
+        }
+      }
+    },
+    "headers": {
+      "type": "object",
+      "description": "The headers of the response."
+    }
+  },
+  "required": [
+    "payload",
+    "headers"
+  ],
+  "additionalProperties": false
+}

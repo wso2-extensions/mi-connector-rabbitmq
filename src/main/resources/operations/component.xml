@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+~  Copyright (c) 2025, WSO2 LLC. (http://wso2.com) All Rights Reserved.
+~
+~  WSO2 LLC. licenses this file to you under the Apache License,
+~  Version 2.0 (the "License"); you may not use this file except
+~  in compliance with the License.
+~  You may obtain a copy of the License at
+~
+~   http://www.apache.org/licenses/LICENSE-2.0
+~
+~  Unless required by applicable law or agreed to in writing,
+~  software distributed under the License is distributed on an
+~  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+~  KIND, either express or implied.  See the License for the
+~  specific language governing permissions and limitations
+~  under the License.
+-->
+
+<component name="operations" type="synapse/template">
+    <subComponents>
+        <component name="publishMessage">
+            <file>publishMessage.xml</file>
+            <displayName>Publish Message</displayName>
+            <description>Send messages to the RabbitMq brokers</description>
+        </component>
+        <component name="sendRpc">
+            <file>sendRpc.xml</file>
+            <displayName>Send RPC Request</displayName>
+            <description>Send RPC Request to the RabbitMq brokers</description>
+        </component>
+        <component name="accept">
+            <file>acceptMessage.xml</file>
+            <displayName>Accept</displayName>
+            <description>Acknowledge the message with the AMQP 1.0 'Accepted' outcome. This indicates that the message has been successfully processed and the broker can safely remove it from the queue.</description>
+        </component>
+        <component name="discard">
+            <file>discardMessage.xml</file>
+            <displayName>Discard</displayName>
+            <description>Reject the message with the AMQP 1.0 'Rejected' outcome. This indicates the message is invalid, and the broker can either discard it or move it to a dead-letter queue if configured.</description>
+        </component>
+        <component name="requeue">
+            <file>requeueMessage.xml</file>
+            <displayName>Requeue</displayName>
+            <description>Release the message with the AMQP 1.0 'Released' outcome. This indicates the message was not processed, and the broker can requeue it for delivery to the same or a different consumer.</description>
+        </component>
+    </subComponents>
+</component>

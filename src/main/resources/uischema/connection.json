@@ -1,0 +1,429 @@
+{
+  "connectorName": "rabbitmq",
+  "connectionName": "rabbitmq",
+  "title": "RabbitMQ Connection",
+  "help": "The RabbitMQ connector enables WSO2 Micro Integrator (MI) to publish messages and perform RPC interactions with a RabbitMQ broker. It supports reliable, asynchronous communication, allowing you to send messages to queues or exchanges, use the RPC pattern, and manage acknowledgments by accepting, discarding, or requeuing messages.",
+  "elements": [
+    {
+      "type": "attribute",
+      "value": {
+        "name": "connectionName",
+        "displayName": "Connection Name",
+        "inputType": "string",
+        "defaultValue": "RABBITMQ_CONNECTION_1",
+        "required": "true",
+        "helpTip": "The name for the rabbitmq connection",
+        "validation": "nameWithoutSpecialCharactors"
+      }
+    },
+    {
+      "type": "attributeGroup",
+      "value": {
+        "groupName": "General",
+        "elements": [
+          {
+            "type": "attributeGroup",
+            "value": {
+              "groupName": "Basic",
+              "elements": [
+                {
+                  "type": "attribute",
+                  "value": {
+                    "name": "serverUrls",
+                    "displayName": "RabbitMQ Broker Urls",
+                    "inputType": "stringOrExpression",
+                    "defaultValue": "localhost:5672",
+                    "required": "true",
+                    "helpTip": "Enter RabbitMQ server URLs as a comma-separated list (e.g., host1:port1,host2:port2).",
+                    "placeholder": "localhost:5672,localhost:5673"
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "type": "attributeGroup",
+      "value": {
+        "groupName": "Auth Configuration",
+        "elements": [
+          {
+            "type": "attribute",
+            "value": {
+              "name": "saslMechanism",
+              "displayName": "SASL Mechanism",
+              "inputType": "combo",
+              "comboValues": [
+                "PLAIN",
+                "EXTERNAL"
+              ],
+              "defaultValue": "PLAIN",
+              "required": "true",
+              "helpTip": "Select the SASL mechanism to use for connection authentication."
+            }
+          },
+          {
+            "type": "attribute",
+            "value": {
+              "name": "oAuth2Enabled",
+              "displayName": "OAuth2 Enabled",
+              "inputType": "checkbox",
+              "defaultValue": false,
+              "required": "false",
+              "enableCondition": [{"saslMechanism": "PLAIN"}],
+              "helpTip": "Enable if using OAuth 2.0 (e.g., Client Credentials or Password Grant) for authentication instead of a simple username/password."
+            }
+          },
+          {
+            "type": "attribute",
+            "value": {
+              "name": "username",
+              "displayName": "Server Username",
+              "inputType": "stringOrExpression",
+              "defaultValue": "guest",
+              "required": "false",
+              "enableCondition": ["AND", {"saslMechanism": "PLAIN"},{"oAuth2Enabled": false}],
+              "helpTip": "Username for PLAIN authentication."
+            }
+          },
+          {
+            "type": "attribute",
+            "value": {
+              "name": "password",
+              "displayName": "Server Password",
+              "inputType": "stringOrExpression",
+              "defaultValue": "guest",
+              "required": "false",
+              "enableCondition": ["AND", {"saslMechanism": "PLAIN"},{"oAuth2Enabled": false}],
+              "helpTip": "Password for PLAIN authentication."
+            }
+          },
+          {
+            "type": "attribute",
+            "value": {
+              "name": "tokenEndpoint",
+              "displayName": "Token Endpoint",
+              "inputType": "stringOrExpression",
+              "defaultValue": "",
+              "required": "false",
+              "enableCondition": [{"oAuth2Enabled": true}],
+              "helpTip": "Enter Identity Provider/Token Service token endpoint URL to generate the access token.",
+              "placeholder": "https://idp.example.com/oauth2/token"
+            }
+          },
+          {
+            "type": "attribute",
+            "value": {
+              "name": "grantType",
+              "displayName": "Grant Type",
+              "inputType": "combo",
+              "comboValues": [
+                "client_credentials",
+                "password"
+              ],
+              "defaultValue": "client_credentials",
+              "required": "false",
+              "enableCondition": [{"oAuth2Enabled": true}],
+              "helpTip": "Select the grant type to use for token generation."
+            }
+          },
+          {
+            "type": "attribute",
+            "value": {
+              "name": "clientId",
+              "displayName": "Client ID",
+              "inputType": "stringOrExpression",
+              "defaultValue": "",
+              "required": "false",
+              "enableCondition": [{"oAuth2Enabled": true}],
+              "helpTip": "The client ID for token generation.",
+              "placeholder": "your_client_id"
+            }
+          },
+          {
+            "type": "attribute",
+            "value": {
+              "name": "clientSecret",
+              "displayName": "Client Secret",
+              "inputType": "stringOrExpression",
+              "defaultValue": "",
+              "required": "false",
+              "enableCondition": [{"oAuth2Enabled": true}],
+              "helpTip": "The client secret for token generation.",
+              "placeholder": "your_client_secret"
+            }
+          },
+          {
+            "type": "attribute",
+            "value": {
+              "name": "oAuth2UserName",
+              "displayName": "User Name",
+              "inputType": "stringOrExpression",
+              "defaultValue": "",
+              "required": "false",
+              "enableCondition": [{"grantType": "password"}],
+              "helpTip": "Enter the username to use with password grant type for token generation.",
+              "placeholder": "oauth2_username"
+            }
+          },
+          {
+            "type": "attribute",
+            "value": {
+              "name": "oAuth2Password",
+              "displayName": "Password",
+              "inputType": "stringOrExpression",
+              "defaultValue": "",
+              "required": "false",
+              "enableCondition": [{"grantType": "password"}],
+              "helpTip": "Enter the password to use with password grant type for token generation",
+              "placeholder": "oauth2_password"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "type": "attributeGroup",
+      "value": {
+        "groupName": "SSL Configuration",
+        "isCollapsed": "true",
+        "elements": [
+          {
+            "type": "attribute",
+            "value": {
+              "name": "sslEnabled",
+              "displayName": "SSL Enabled",
+              "inputType": "checkbox",
+              "defaultValue": false,
+              "required": "false",
+              "helpTip": "Enable SSL/TLS for the RabbitMQ connection."
+            }
+          },
+          {
+            "type": "attribute",
+            "value": {
+              "name": "trustEverything",
+              "displayName": "Trust Everything",
+              "inputType": "checkbox",
+              "defaultValue": false,
+              "required": "false",
+              "enableCondition": [{"sslEnabled": true}],
+              "helpTip": "If enabled, all server certificates will be accepted, regardless of validity. **Not recommended for production environments.**"
+            }
+          },
+          {
+            "type": "attribute",
+            "value": {
+              "name": "keyStoreLocation",
+              "displayName": "Keystore Location",
+              "inputType": "stringOrExpression",
+              "defaultValue": "",
+              "required": "false",
+              "enableCondition": ["AND",{"sslEnabled": true},{"trustEverything":false}],
+              "helpTip": "The file path to the Keystore containing the client's private key and certificate.",
+              "placeholder": "/path/to/client.jks"
+            }
+          },
+          {
+            "type": "attribute",
+            "value": {
+              "name": "keyStoreType",
+              "displayName": "Keystore Type",
+              "inputType": "stringOrExpression",
+              "defaultValue": "JKS",
+              "required": "false",
+              "enableCondition": ["AND",{"sslEnabled": true},{"trustEverything":false}],
+              "helpTip": "The type of the Keystore (e.g., JKS)."
+            }
+          },
+          {
+            "type": "attribute",
+            "value": {
+              "name": "keyStorePassword",
+              "displayName": "Keystore Password",
+              "inputType": "stringOrExpression",
+              "defaultValue": "",
+              "required": "false",
+              "enableCondition": ["AND",{"sslEnabled": true},{"trustEverything":false}],
+              "helpTip": "The password to access the Keystore."
+            }
+          },
+          {
+            "type": "attribute",
+            "value": {
+              "name": "trustStoreLocation",
+              "displayName": "Truststore Location",
+              "inputType": "stringOrExpression",
+              "defaultValue": "",
+              "required": "false",
+              "enableCondition": ["AND",{"sslEnabled": true},{"trustEverything":false}],
+              "helpTip": "The file path to the Truststore containing trusted server certificates.",
+              "placeholder": "/path/to/trust.jks"
+            }
+          },
+          {
+            "type": "attribute",
+            "value": {
+              "name": "trustStoreType",
+              "displayName": "Truststore Type",
+              "inputType": "stringOrExpression",
+              "defaultValue": "JKS",
+              "required": "false",
+              "enableCondition": ["AND",{"sslEnabled": true},{"trustEverything":false}],
+              "helpTip": "The type of the Truststore (e.g., JKS)."
+            }
+          },
+          {
+            "type": "attribute",
+            "value": {
+              "name": "trustStorePassword",
+              "displayName": "Truststore Password",
+              "inputType": "stringOrExpression",
+              "defaultValue": "",
+              "required": "false",
+              "enableCondition": ["AND",{"sslEnabled": true},{"trustEverything":false}],
+              "helpTip": "The password to access the Truststore."
+            }
+          },
+          {
+            "type": "attribute",
+            "value": {
+              "name": "sslVersion",
+              "displayName": "SSL Version",
+              "inputType": "stringOrExpression",
+              "defaultValue": "TLSv1.2",
+              "required": "false",
+              "enableCondition": ["AND",{"sslEnabled": true},{"trustEverything":false}],
+              "helpTip": "The preferred SSL/TLS protocol version (e.g., 'TLSv1.2', 'TLSv1.3').",
+              "placeholder": "TLSv1.2"
+            }
+          },
+          {
+            "type": "attribute",
+            "value": {
+              "name": "hostnameVerificationEnabled",
+              "displayName": "Enabled SSL Hostname Verification",
+              "inputType": "checkbox",
+              "defaultValue": false,
+              "required": "false",
+              "enableCondition": ["AND",{"sslEnabled": true},{"trustEverything":false}],
+              "helpTip": "If enabled, the hostname in the server's certificate must match the server host name you are connecting to."
+            }
+          }
+        ]
+      }
+    },
+    {
+      "type": "attributeGroup",
+      "value": {
+        "groupName": "Advanced",
+        "elements": [
+          {
+            "type": "attribute",
+            "value": {
+              "name": "virtualHost",
+              "displayName": "Virtual Host",
+              "inputType": "stringOrExpression",
+              "defaultValue": "",
+              "required": "false",
+              "helpTip": "The virtual host (vhost) within the RabbitMQ server to connect to. Leave blank for the default '/' vhost.",
+              "placeholder": "/"
+            }
+          },
+          {
+            "type": "attribute",
+            "value": {
+              "name": "connectionIdleTimeout",
+              "displayName": "Connection Idle Timeout",
+              "inputType": "stringOrExpression",
+              "defaultValue": "",
+              "required": "false",
+              "helpTip": "The maximum period (in milliseconds) the connection can remain idle without any activity before it is closed by the server.",
+              "placeholder": "60000"
+            }
+          },
+          {
+            "type": "attribute",
+            "value": {
+              "name": "connectionEstablishRetryCount",
+              "displayName": "Connection Establish Retry Count",
+              "inputType": "stringOrExpression",
+              "defaultValue": "",
+              "required": "false",
+              "helpTip": "The number of times to retry establishing the connection to the RabbitMQ server. Leave blank for default.",
+              "placeholder": "5"
+            }
+          },
+          {
+            "type": "attribute",
+            "value": {
+              "name": "connectionEstablishRetryInterval",
+              "displayName": "Connection Establish Retry Interval",
+              "inputType": "stringOrExpression",
+              "defaultValue": "",
+              "required": "false",
+              "helpTip": "The interval (in milliseconds) between retries when establishing the connection.",
+              "placeholder": "1000"
+            }
+          },
+          {
+            "type": "attribute",
+            "value": {
+              "name": "connectionRecoveryPolicyType",
+              "displayName": "Connection Recovery Policy Type",
+              "inputType": "combo",
+              "comboValues": [
+                "FIXED",
+                "FIXED_WITH_INITIAL_DELAY",
+                "FIXED_WITH_INITIAL_DELAY_AND_TIMEOUT"
+              ],
+              "defaultValue": "FIXED_WITH_INITIAL_DELAY_AND_TIMEOUT",
+              "required": "false",
+              "helpTip": "Defines the strategy for automatic connection recovery after a disconnection."
+            }
+          },
+          {
+            "type": "attribute",
+            "value": {
+              "name": "connectionRecoveryInitialDelay",
+              "displayName": "Connection Recovery Initial Delay",
+              "inputType": "stringOrExpression",
+              "defaultValue": "",
+              "required": "false",
+              "enableCondition": ["NOT", {"connectionRecoveryPolicyType": "FIXED"}],
+              "helpTip": "The initial delay (in milliseconds) before the first recovery attempt starts.",
+              "placeholder": "5000"
+            }
+          },
+          {
+            "type": "attribute",
+            "value": {
+              "name": "connectionRecoveryInterval",
+              "displayName": "Connection Recovery Interval",
+              "inputType": "stringOrExpression",
+              "defaultValue": "",
+              "required": "false",
+              "helpTip": "The fixed interval (in milliseconds) between connection recovery retries.",
+              "placeholder": "10000"
+            }
+          },
+          {
+            "type": "attribute",
+            "value": {
+              "name": "connectionRecoveryTimeout",
+              "displayName": "Connection Recovery Timeout",
+              "inputType": "stringOrExpression",
+              "defaultValue": "",
+              "required": "false",
+              "enableCondition": [{"connectionRecoveryPolicyType": "FIXED_WITH_INITIAL_DELAY_AND_TIMEOUT"}],
+              "helpTip": "The total time (in milliseconds) allowed for the connection recovery process before giving up.",
+              "placeholder": "60000"
+            }
+          }
+        ]
+      }
+    }
+  ]
+}
