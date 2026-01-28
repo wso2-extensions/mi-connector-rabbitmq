@@ -115,8 +115,8 @@
     <scm>
         <connection>scm:git:https://github.com/wso2-extensions/mi-connector-rabbitmq.git</connection>
         <url>https://github.com/wso2-extensions/mi-connector-rabbitmq.git</url>
-        <developerConnection>scm:https://github.com/wso2-extensions/mi-connector-rabbitmq</developerConnection>
-        <tag>v1.0.0</tag>
+        <developerConnection>scm:git:https://github.com/wso2-extensions/mi-connector-rabbitmq</developerConnection>
+        <tag>HEAD</tag>
     </scm>
     <build>
         <plugins>
