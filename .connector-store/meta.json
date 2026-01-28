@@ -22,6 +22,27 @@
             ],
             "operations": [
                 {
+                    "name": "discard",
+                    "description": "Discard",
+                    "params": [
+                        {
+                            "name": "responseVariable",
+                            "type": "string",
+                            "required": true,
+                            "defaultValue": "",
+                            "description": "Name of the variable to which the output of the operation should be assigned"
+                        },
+                        {
+                            "name": "overwriteBody",
+                            "type": "checkbox",
+                            "required": false,
+                            "defaultValue": "false",
+                            "description": "Replace the Message Body in Message Context with the output of the operation (This will remove the payload from the above variable)."
+                        }
+                    ],
+                    "isHidden": false
+                },
+                {
                     "name": "publishMessage",
                     "description": "Publish Message",
                     "params": [
@@ -37,7 +58,7 @@
                             "type": "combo",
                             "required": false,
                             "defaultValue": "CLASSIC",
-                            "description": "Select the type of RabbitMQ queue to interact with: Classic, Quorum (for high availability), or Stream (for large, continuous message flows). Values: CLASSIC, QUORUM, STREAM ."
+                            "description": "Select the type of RabbitMQ queue to interact with: Classic, Quorum (for high availability), or Stream (for large, continuous message flows). Supported values: CLASSIC, QUORUM, STREAM"
                         },
                         {
                             "name": "queueAutoDeclare",
@@ -58,7 +79,7 @@
                             "type": "combo",
                             "required": false,
                             "defaultValue": "DIRECT",
-                            "description": "The type of the RabbitMQ exchange: **DIRECT**, **FANOUT** (broadcast), **TOPIC** (wildcard routing), or **HEADERS** (attribute matching). Values: DIRECT, FANOUT, TOPIC, HEADERS ."
+                            "description": "The type of the RabbitMQ exchange: **DIRECT**, **FANOUT** (broadcast), **TOPIC** (wildcard routing), or **HEADERS** (attribute matching). Supported values: DIRECT, FANOUT, TOPIC, HEADERS"
                         },
                         {
                             "name": "exchangeAutoDeclare",
@@ -75,39 +96,32 @@
                             "description": "Specify a routing key when binding a queue to a **DIRECT** or **TOPIC** exchange. If omitted, the queue name will be used as the routing key."
                         },
                         {
-                            "name": "headers",
-                            "type": "table",
-                            "required": false,
-                            "defaultValue": null,
-                            "description": "Key value pairs for headers (RabbitMQ Message Properties)."
-                        },
-                        {
                             "name": "requestBodyType",
                             "type": "combo",
                             "required": false,
                             "defaultValue": "JSON",
-                            "description": "The Content Type of the message body. Values: JSON, XML, TEXT (RabbitMQ Content Type header)."
+                            "description": "Supported values: JSON, XML, TEXT"
                         },
                         {
                             "name": "requestBodyJson",
                             "type": "expressionTextArea",
                             "required": false,
                             "defaultValue": "${payload}",
-                            "description": "Request Body for JSON messages."
+                            "description": ""
                         },
                         {
                             "name": "requestBodyXml",
                             "type": "expressionTextArea",
                             "required": false,
                             "defaultValue": "${xpath('$body/node()')}",
-                            "description": "Request Body for XML messages."
+                            "description": ""
                         },
                         {
                             "name": "requestBodyText",
                             "type": "expressionTextArea",
                             "required": false,
                             "defaultValue": "${xpath('$body/node()')}",
-                            "description": "Request Body for TEXT messages."
+                            "description": ""
                         },
                         {
                             "name": "publisherConfirms",
@@ -135,7 +149,7 @@
                             "type": "combo",
                             "required": false,
                             "defaultValue": "",
-                            "description": "For Classic Queues, select the queue version (V1 or V2). V2 offers better performance and scale."
+                            "description": "For Classic Queues, select the queue version (V1 or V2). V2 offers better performance and scale. Supported values: V1, V2"
                         },
                         {
                             "name": "maxPriority",
@@ -149,7 +163,7 @@
                             "type": "stringOrExpression",
                             "required": false,
                             "defaultValue": "",
-                            "description": "For Quorum Queues: the initial number of replica nodes required for the queue. For STREAM queues: the initial number of stream members. Leave blank for default."
+                            "description": "For Quorum Queues: the initial number of replica nodes required for the queue."
                         },
                         {
                             "name": "deliveryLimit",
@@ -163,7 +177,14 @@
                             "type": "combo",
                             "required": false,
                             "defaultValue": "",
-                            "description": "For Quorum Queues: defines the acknowledgment and redelivery behavior for failed messages. Values: AT_LEAST_ONCE, AT_MOST_ONCE ."
+                            "description": "For Quorum Queues: defines the acknowledgment and redelivery behavior for failed messages. Supported values: AT_LEAST_ONCE, AT_MOST_ONCE"
+                        },
+                        {
+                            "name": "initialMemberCount",
+                            "type": "stringOrExpression",
+                            "required": false,
+                            "defaultValue": "",
+                            "description": "For STREAM queues: the initial number of stream members. Leave blank for default."
                         },
                         {
                             "name": "maxAge",
@@ -198,7 +219,7 @@
                             "type": "combo",
                             "required": false,
                             "defaultValue": "DROP_HEAD",
-                            "description": "Defines what happens when a queue reaches its maximum length: **DROP_HEAD** (oldest messages are discarded), **REJECT_PUBLISH** (new messages are rejected), or **REJECT_PUBLISH_DLX** (rejected and sent to the Dead Letter Exchange). Values: DROP_HEAD, REJECT_PUBLISH, REJECT_PUBLISH_DLX ."
+                            "description": "Defines what happens when a queue reaches its maximum length: **DROP_HEAD** (oldest messages are discarded), **REJECT_PUBLISH** (new messages are rejected), or **REJECT_PUBLISH_DLX** (rejected and sent to the Dead Letter Exchange). Supported values: DROP_HEAD, REJECT_PUBLISH, REJECT_PUBLISH_DLX"
                         },
                         {
                             "name": "exchangeArguments",
@@ -239,6 +260,27 @@
                             "name": "overwriteBody",
                             "type": "checkbox",
                             "required": false,
+                            "defaultValue": false,
+                            "description": "Replace the Message Body in Message Context with the output of the operation (This will remove the payload from the above variable)."
+                        }
+                    ],
+                    "isHidden": false
+                },
+                {
+                    "name": "requeue",
+                    "description": "Requeue",
+                    "params": [
+                        {
+                            "name": "responseVariable",
+                            "type": "string",
+                            "required": true,
+                            "defaultValue": "",
+                            "description": "Name of the variable to which the output of the operation should be assigned"
+                        },
+                        {
+                            "name": "overwriteBody",
+                            "type": "checkbox",
+                            "required": false,
                             "defaultValue": "false",
                             "description": "Replace the Message Body in Message Context with the output of the operation (This will remove the payload from the above variable)."
                         }
@@ -249,13 +291,6 @@
                     "name": "sendRpc",
                     "description": "Send RPC Request",
                     "params": [
-                        {
-                            "name": "configRef",
-                            "type": "connection",
-                            "required": true,
-                            "defaultValue": "",
-                            "description": "Connection to be used"
-                        },
                         {
                             "name": "queue",
                             "type": "stringOrExpression",
@@ -268,7 +303,7 @@
                             "type": "combo",
                             "required": true,
                             "defaultValue": "QUORUM",
-                            "description": "Select the type of RabbitMQ queue to interact with: Classic, Quorum (for high availability), or Stream (for large, continuous message flows). Values: CLASSIC, QUORUM, STREAM ."
+                            "description": "Select the type of RabbitMQ queue to interact with: Classic, Quorum (for high availability), or Stream (for large, continuous message flows). Supported values: CLASSIC, QUORUM, STREAM"
                         },
                         {
                             "name": "queueAutoDeclare",
@@ -289,7 +324,7 @@
                             "type": "combo",
                             "required": true,
                             "defaultValue": "QUORUM",
-                            "description": "Select the type of RabbitMQ queue to interact with: Classic, Quorum (for high availability), or Stream (for large, continuous message flows). Values: CLASSIC, QUORUM, STREAM ."
+                            "description": "Select the type of RabbitMQ queue to interact with: Classic, Quorum (for high availability), or Stream (for large, continuous message flows). Supported values: CLASSIC, QUORUM, STREAM"
                         },
                         {
                             "name": "replyToQueueAutoDeclare",
@@ -299,39 +334,32 @@
                             "description": "If enabled, the connector will attempt to declare the specified queue on the RabbitMQ server if it doesn't already exist."
                         },
                         {
-                            "name": "headers",
-                            "type": "table",
-                            "required": false,
-                            "defaultValue": null,
-                            "description": "Key value pairs for headers (RabbitMQ Message Properties)."
-                        },
-                        {
                             "name": "requestBodyType",
                             "type": "combo",
                             "required": false,
                             "defaultValue": "JSON",
-                            "description": "The Content Type of the message body. Values: JSON, XML, TEXT (RabbitMQ Content Type header)."
+                            "description": "Supported values: JSON, XML, TEXT"
                         },
                         {
                             "name": "requestBodyJson",
                             "type": "expressionTextArea",
                             "required": false,
                             "defaultValue": "${payload}",
-                            "description": "Request Body for JSON messages."
+                            "description": ""
                         },
                         {
                             "name": "requestBodyXml",
                             "type": "expressionTextArea",
                             "required": false,
                             "defaultValue": "${xpath('$body/node()')}",
-                            "description": "Request Body for XML messages."
+                            "description": ""
                         },
                         {
                             "name": "requestBodyText",
                             "type": "expressionTextArea",
                             "required": false,
                             "defaultValue": "${xpath('$body/node()')}",
-                            "description": "Request Body for TEXT messages."
+                            "description": ""
                         },
                         {
                             "name": "requestTimeout",
@@ -345,7 +373,7 @@
                             "type": "combo",
                             "required": false,
                             "defaultValue": "JSON",
-                            "description": "Set the desired content type for the response if the content type cannot be determined from the RabbitMQ response message. Values: JSON, XML, TEXT ."
+                            "description": "Set the desired content type for the response if the content type cannot be determined from the RabbitMQ response message. Supported values: JSON, XML, TEXT"
                         },
                         {
                             "name": "queueArguments",
@@ -359,7 +387,7 @@
                             "type": "combo",
                             "required": false,
                             "defaultValue": "",
-                            "description": "For Classic Queues, select the queue version (V1 or V2). V2 offers better performance and scale."
+                            "description": "For Classic Queues, select the queue version (V1 or V2). V2 offers better performance and scale. Supported values: V1, V2"
                         },
                         {
                             "name": "maxPriority",
@@ -373,7 +401,7 @@
                             "type": "stringOrExpression",
                             "required": false,
                             "defaultValue": "",
-                            "description": "For Quorum Queues: the initial number of replica nodes required for the queue. For STREAM queues: the initial number of stream members. Leave blank for default."
+                            "description": "For Quorum Queues: the initial number of replica nodes required for the queue."
                         },
                         {
                             "name": "deliveryLimit",
@@ -387,7 +415,14 @@
                             "type": "combo",
                             "required": false,
                             "defaultValue": "",
-                            "description": "For Quorum Queues: defines the acknowledgment and redelivery behavior for failed messages. Values: AT_LEAST_ONCE, AT_MOST_ONCE ."
+                            "description": "For Quorum Queues: defines the acknowledgment and redelivery behavior for failed messages. Supported values: AT_LEAST_ONCE, AT_MOST_ONCE"
+                        },
+                        {
+                            "name": "initialMemberCount",
+                            "type": "stringOrExpression",
+                            "required": false,
+                            "defaultValue": "",
+                            "description": "For STREAM queues: the initial number of stream members. Leave blank for default."
                         },
                         {
                             "name": "maxAge",
@@ -422,7 +457,7 @@
                             "type": "combo",
                             "required": false,
                             "defaultValue": "DROP_HEAD",
-                            "description": "Defines what happens when a queue reaches its maximum length: **DROP_HEAD** (oldest messages are discarded), **REJECT_PUBLISH** (new messages are rejected), or **REJECT_PUBLISH_DLX** (rejected and sent to the Dead Letter Exchange). Values: DROP_HEAD, REJECT_PUBLISH, REJECT_PUBLISH_DLX ."
+                            "description": "Defines what happens when a queue reaches its maximum length: **DROP_HEAD** (oldest messages are discarded), **REJECT_PUBLISH** (new messages are rejected), or **REJECT_PUBLISH_DLX** (rejected and sent to the Dead Letter Exchange). Supported values: DROP_HEAD, REJECT_PUBLISH, REJECT_PUBLISH_DLX"
                         },
                         {
                             "name": "replyToQueueArguments",
@@ -436,7 +471,7 @@
                             "type": "combo",
                             "required": false,
                             "defaultValue": "",
-                            "description": "For Classic Queues, select the queue version (V1 or V2). V2 offers better performance and scale."
+                            "description": "For Classic Queues, select the queue version (V1 or V2). V2 offers better performance and scale. Supported values: V1, V2"
                         },
                         {
                             "name": "replyToQueueMaxPriority",
@@ -450,7 +485,7 @@
                             "type": "stringOrExpression",
                             "required": false,
                             "defaultValue": "",
-                            "description": "For Quorum Queues: the initial number of replica nodes required for the queue. For STREAM queues: the initial number of stream members. Leave blank for default."
+                            "description": "For Quorum Queues: the initial number of replica nodes required for the queue."
                         },
                         {
                             "name": "replyToQueueDeliveryLimit",
@@ -464,7 +499,14 @@
                             "type": "combo",
                             "required": false,
                             "defaultValue": "",
-                            "description": "For Quorum Queues: defines the acknowledgment and redelivery behavior for failed messages. Values: AT_LEAST_ONCE, AT_MOST_ONCE ."
+                            "description": "For Quorum Queues: defines the acknowledgment and redelivery behavior for failed messages. Supported values: AT_LEAST_ONCE, AT_MOST_ONCE"
+                        },
+                        {
+                            "name": "replyToQueueInitialMemberCount",
+                            "type": "stringOrExpression",
+                            "required": false,
+                            "defaultValue": "",
+                            "description": "For STREAM queues: the initial number of stream members. Leave blank for default."
                         },
                         {
                             "name": "replyToQueueMaxAge",
@@ -499,7 +541,7 @@
                             "type": "combo",
                             "required": false,
                             "defaultValue": "DROP_HEAD",
-                            "description": "Defines what happens when a queue reaches its maximum length: **DROP_HEAD** (oldest messages are discarded), **REJECT_PUBLISH** (new messages are rejected), or **REJECT_PUBLISH_DLX** (rejected and sent to the Dead Letter Exchange). Values: DROP_HEAD, REJECT_PUBLISH, REJECT_PUBLISH_DLX ."
+                            "description": "Defines what happens when a queue reaches its maximum length: **DROP_HEAD** (oldest messages are discarded), **REJECT_PUBLISH** (new messages are rejected), or **REJECT_PUBLISH_DLX** (rejected and sent to the Dead Letter Exchange). Supported values: DROP_HEAD, REJECT_PUBLISH, REJECT_PUBLISH_DLX"
                         },
                         {
                             "name": "requestCharSet",
@@ -534,49 +576,7 @@
                 },
                 {
                     "name": "accept",
-                    "description": "Acknowledge the message with the AMQP 1.0 'Accepted' outcome. This indicates that the message has been successfully processed and the broker can safely remove it from the queue.",
-                    "params": [
-                        {
-                            "name": "responseVariable",
-                            "type": "string",
-                            "required": true,
-                            "defaultValue": "",
-                            "description": "Name of the variable to which the output of the operation should be assigned"
-                        },
-                        {
-                            "name": "overwriteBody",
-                            "type": "checkbox",
-                            "required": false,
-                            "defaultValue": "false",
-                            "description": "Replace the Message Body in Message Context with the output of the operation (This will remove the payload from the above variable)."
-                        }
-                    ],
-                    "isHidden": false
-                },
-                {
-                    "name": "discard",
-                    "description": "Reject the message with the AMQP 1.0 'Rejected' outcome. This indicates the message is invalid, and the broker can either discard it or move it to a dead-letter queue if configured.",
-                    "params": [
-                        {
-                            "name": "responseVariable",
-                            "type": "string",
-                            "required": true,
-                            "defaultValue": "",
-                            "description": "Name of the variable to which the output of the operation should be assigned"
-                        },
-                        {
-                            "name": "overwriteBody",
-                            "type": "checkbox",
-                            "required": false,
-                            "defaultValue": "false",
-                            "description": "Replace the Message Body in Message Context with the output of the operation (This will remove the payload from the above variable)."
-                        }
-                    ],
-                    "isHidden": false
-                },
-                {
-                    "name": "requeue",
-                    "description": "Release the message with the AMQP 1.0 'Released' outcome. This indicates the message was not processed, and the broker can requeue it for delivery to the same or a different consumer.",
+                    "description": "Accept",
                     "params": [
                         {
                             "name": "responseVariable",
@@ -606,7 +606,7 @@
                             "type": "string",
                             "required": true,
                             "defaultValue": "RABBITMQ_CONNECTION_1",
-                            "description": "The name for the rabbitmq connection."
+                            "description": "The name for the rabbitmq connection"
                         },
                         {
                             "name": "serverUrls",
@@ -620,7 +620,7 @@
                             "type": "combo",
                             "required": true,
                             "defaultValue": "PLAIN",
-                            "description": "Select the SASL mechanism to use for connection authentication. Values: PLAIN, EXTERNAL ."
+                            "description": "Select the SASL mechanism to use for connection authentication. Supported values: PLAIN, EXTERNAL"
                         },
                         {
                             "name": "oAuth2Enabled",
@@ -655,7 +655,7 @@
                             "type": "combo",
                             "required": false,
                             "defaultValue": "client_credentials",
-                            "description": "Select the grant type to use for token generation. Values: client_credentials, password ."
+                            "description": "Select the grant type to use for token generation. Supported values: client_credentials, password"
                         },
                         {
                             "name": "clientId",
@@ -683,7 +683,7 @@
                             "type": "stringOrExpression",
                             "required": false,
                             "defaultValue": "",
-                            "description": "Enter the password to use with password grant type for token generation."
+                            "description": "Enter the password to use with password grant type for token generation"
                         },
                         {
                             "name": "sslEnabled",
@@ -788,7 +788,7 @@
                             "type": "combo",
                             "required": false,
                             "defaultValue": "FIXED_WITH_INITIAL_DELAY_AND_TIMEOUT",
-                            "description": "Defines the strategy for automatic connection recovery after a disconnection. Values: FIXED, FIXED_WITH_INITIAL_DELAY, FIXED_WITH_INITIAL_DELAY_AND_TIMEOUT ."
+                            "description": "Defines the strategy for automatic connection recovery after a disconnection. Supported values: FIXED, FIXED_WITH_INITIAL_DELAY, FIXED_WITH_INITIAL_DELAY_AND_TIMEOUT"
                         },
                         {
                             "name": "connectionRecoveryInitialDelay",
