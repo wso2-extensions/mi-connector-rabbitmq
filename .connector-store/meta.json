@@ -64,7 +64,7 @@
                             "name": "queueAutoDeclare",
                             "type": "checkbox",
                             "required": false,
-                            "defaultValue": true,
+                            "defaultValue": "true",
                             "description": "If enabled, the connector will attempt to declare the specified queue on the RabbitMQ server if it doesn't already exist."
                         },
                         {
@@ -85,7 +85,7 @@
                             "name": "exchangeAutoDeclare",
                             "type": "checkbox",
                             "required": false,
-                            "defaultValue": true,
+                            "defaultValue": "true",
                             "description": "If enabled, the connector will attempt to declare the specified exchange on the RabbitMQ server if it doesn't already exist."
                         },
                         {
@@ -127,7 +127,7 @@
                             "name": "publisherConfirms",
                             "type": "checkbox",
                             "required": false,
-                            "defaultValue": true,
+                            "defaultValue": "true",
                             "description": "Enable publisher confirms to ensure message delivery acknowledgment from the RabbitMQ broker."
                         },
                         {
@@ -204,14 +204,14 @@
                             "name": "queueExclusive",
                             "type": "checkbox",
                             "required": false,
-                            "defaultValue": false,
+                            "defaultValue": "false",
                             "description": "If enabled, the queue will be deleted when the connection that declared it closes. Only one consumer can use an exclusive queue."
                         },
                         {
                             "name": "queueAutoDelete",
                             "type": "checkbox",
                             "required": false,
-                            "defaultValue": false,
+                            "defaultValue": "false",
                             "description": "If enabled, the queue will be automatically deleted when the last consumer disconnects from it."
                         },
                         {
@@ -239,7 +239,7 @@
                             "name": "exchangeAutoDelete",
                             "type": "checkbox",
                             "required": false,
-                            "defaultValue": false,
+                            "defaultValue": "false",
                             "description": "If enabled, the exchange will be automatically deleted when the last queue is unbound from it."
                         },
                         {
@@ -260,7 +260,7 @@
                             "name": "overwriteBody",
                             "type": "checkbox",
                             "required": false,
-                            "defaultValue": false,
+                            "defaultValue": "false",
                             "description": "Replace the Message Body in Message Context with the output of the operation (This will remove the payload from the above variable)."
                         }
                     ],
@@ -309,7 +309,7 @@
                             "name": "queueAutoDeclare",
                             "type": "checkbox",
                             "required": false,
-                            "defaultValue": true,
+                            "defaultValue": "true",
                             "description": "If enabled, the connector will attempt to declare the specified queue on the RabbitMQ server if it doesn't already exist."
                         },
                         {
@@ -330,7 +330,7 @@
                             "name": "replyToQueueAutoDeclare",
                             "type": "checkbox",
                             "required": false,
-                            "defaultValue": true,
+                            "defaultValue": "true",
                             "description": "If enabled, the connector will attempt to declare the specified queue on the RabbitMQ server if it doesn't already exist."
                         },
                         {
@@ -442,14 +442,14 @@
                             "name": "queueExclusive",
                             "type": "checkbox",
                             "required": false,
-                            "defaultValue": false,
+                            "defaultValue": "false",
                             "description": "If enabled, the queue will be deleted when the connection that declared it closes. Only one consumer can use an exclusive queue."
                         },
                         {
                             "name": "queueAutoDelete",
                             "type": "checkbox",
                             "required": false,
-                            "defaultValue": false,
+                            "defaultValue": "false",
                             "description": "If enabled, the queue will be automatically deleted when the last consumer disconnects from it."
                         },
                         {
@@ -526,14 +526,14 @@
                             "name": "replyToQueueExclusive",
                             "type": "checkbox",
                             "required": false,
-                            "defaultValue": false,
+                            "defaultValue": "false",
                             "description": "If enabled, the queue will be deleted when the connection that declared it closes. Only one consumer can use an exclusive queue."
                         },
                         {
                             "name": "replyToQueueAutoDelete",
                             "type": "checkbox",
                             "required": false,
-                            "defaultValue": false,
+                            "defaultValue": "false",
                             "description": "If enabled, the queue will be automatically deleted when the last consumer disconnects from it."
                         },
                         {
@@ -626,7 +626,7 @@
                             "name": "oAuth2Enabled",
                             "type": "checkbox",
                             "required": false,
-                            "defaultValue": false,
+                            "defaultValue": "false",
                             "description": "Enable if using OAuth 2.0 (e.g., Client Credentials or Password Grant) for authentication instead of a simple username/password."
                         },
                         {
@@ -689,14 +689,14 @@
                             "name": "sslEnabled",
                             "type": "checkbox",
                             "required": false,
-                            "defaultValue": false,
+                            "defaultValue": "false",
                             "description": "Enable SSL/TLS for the RabbitMQ connection."
                         },
                         {
                             "name": "trustEverything",
                             "type": "checkbox",
                             "required": false,
-                            "defaultValue": false,
+                            "defaultValue": "false",
                             "description": "If enabled, all server certificates will be accepted, regardless of validity. **Not recommended for production environments.**"
                         },
                         {
@@ -752,7 +752,7 @@
                             "name": "hostnameVerificationEnabled",
                             "type": "checkbox",
                             "required": false,
-                            "defaultValue": false,
+                            "defaultValue": "false",
                             "description": "If enabled, the hostname in the server's certificate must match the server host name you are connecting to."
                         },
                         {
