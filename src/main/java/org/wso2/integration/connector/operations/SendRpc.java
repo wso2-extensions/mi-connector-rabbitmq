@@ -220,7 +220,7 @@ public class SendRpc extends AbstractConnectorOperation {
     private void handleError(MessageContext msgCtx, Exception e, Error error, String errorDetail,
                              String responseVariable, boolean overwriteBody) {
 
-        JsonObject resultJSON = RabbitMQUtils.buildErrorResponse(msgCtx, e, error);
+        JsonObject resultJSON = RabbitMQUtils.buildErrorResponse(msgCtx.getMessageID(),msgCtx, e, error);
         handleConnectorResponse(msgCtx, responseVariable, overwriteBody, resultJSON, null, null);
         handleException(errorDetail, e, msgCtx);
     }
