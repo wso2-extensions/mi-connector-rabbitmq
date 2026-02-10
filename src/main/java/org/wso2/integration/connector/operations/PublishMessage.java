@@ -210,7 +210,7 @@ public class PublishMessage extends AbstractConnectorOperation {
                             handleConnectorResponse(
                                     messageContext, responseVariable, false,
                                     RabbitMQUtils.buildErrorResponse(
-                                            messageID,messageContext, throwable.getCause(), Error.OPERATION_ERROR),
+                                            messageID, messageContext, throwable.getCause(), Error.OPERATION_ERROR),
                                     null, null);
                         } else {
                             errorDetail = "Error occurred while performing rabbitmq:publishMessage "
@@ -287,7 +287,7 @@ public class PublishMessage extends AbstractConnectorOperation {
         ClientKey key = new ClientKey(queue, exchange, routingKey, null);
         if (queue == null && exchange == null) {
             throw new SynapseException("Publisher client initialization failed due to insufficient information." +
-                    " Provide at least one: Queue, Exchange, or Routing Key.");
+                    " Provide at least one: Queue or Exchange.");
         }
         if (exchangeType == null) {
             exchangeType = DEFAULT_EXCHANGE_TYPE;
