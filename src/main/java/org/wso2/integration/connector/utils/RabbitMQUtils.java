@@ -228,6 +228,7 @@ public class RabbitMQUtils {
     /**
      * Builds a JSON response indicating an error during the operation.
      *
+     * @param messageId      The ID of the message.
      * @param messageContext The message context associated with the error.
      * @param e              The exception that occurred.
      * @param error          The error details to include in the response.
