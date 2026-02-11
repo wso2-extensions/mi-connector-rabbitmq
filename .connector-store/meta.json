@@ -16,6 +16,806 @@
     ],
     "releases": [
         {
+            "tagName": "v1.0.1",
+            "products": [
+                "MI 4.6.0"
+            ],
+            "operations": [
+                {
+                    "name": "discard",
+                    "description": "Discard",
+                    "params": [
+                        {
+                            "name": "responseVariable",
+                            "type": "string",
+                            "required": true,
+                            "defaultValue": "",
+                            "description": "Name of the variable to which the output of the operation should be assigned"
+                        },
+                        {
+                            "name": "overwriteBody",
+                            "type": "checkbox",
+                            "required": false,
+                            "defaultValue": "false",
+                            "description": "Replace the Message Body in Message Context with the output of the operation (This will remove the payload from the above variable)."
+                        }
+                    ],
+                    "isHidden": false
+                },
+                {
+                    "name": "publishMessage",
+                    "description": "Publish Message",
+                    "params": [
+                        {
+                            "name": "queue",
+                            "type": "stringOrExpression",
+                            "required": false,
+                            "defaultValue": "",
+                            "description": "Specify the name of the RabbitMQ queue to publish to."
+                        },
+                        {
+                            "name": "queueType",
+                            "type": "combo",
+                            "required": false,
+                            "defaultValue": "QUORUM",
+                            "description": "Select the type of RabbitMQ queue to interact with: Classic, Quorum (for high availability), or Stream (for large, continuous message flows). Supported values: CLASSIC, QUORUM, STREAM"
+                        },
+                        {
+                            "name": "queueAutoDeclare",
+                            "type": "checkbox",
+                            "required": false,
+                            "defaultValue": true,
+                            "description": "If enabled, the connector will attempt to declare the specified queue on the RabbitMQ server if it doesn't already exist."
+                        },
+                        {
+                            "name": "exchange",
+                            "type": "stringOrExpression",
+                            "required": false,
+                            "defaultValue": "",
+                            "description": "Specify exchange name and routing key to publish message via an exchange instead of a queue. If using an exchange, leave queue blank\u2014the routing key controls message delivery based on exchange type."
+                        },
+                        {
+                            "name": "exchangeType",
+                            "type": "combo",
+                            "required": false,
+                            "defaultValue": "DIRECT",
+                            "description": "The type of the RabbitMQ exchange: DIRECT, FANOUT (broadcast), TOPIC (wildcard routing), or HEADERS (attribute matching). Supported values: DIRECT, FANOUT, TOPIC, HEADERS"
+                        },
+                        {
+                            "name": "exchangeAutoDeclare",
+                            "type": "checkbox",
+                            "required": false,
+                            "defaultValue": true,
+                            "description": "If enabled, the connector will attempt to declare the specified exchange on the RabbitMQ server if it doesn't already exist."
+                        },
+                        {
+                            "name": "routingKey",
+                            "type": "stringOrExpression",
+                            "required": false,
+                            "defaultValue": "",
+                            "description": "Specify a routing key when binding a queue to a DIRECT or TOPIC exchange. If omitted, the queue name will be used as the routing key."
+                        },
+                        {
+                            "name": "requestBodyType",
+                            "type": "combo",
+                            "required": false,
+                            "defaultValue": "JSON",
+                            "description": "Supported values: JSON, XML, TEXT"
+                        },
+                        {
+                            "name": "requestBodyJson",
+                            "type": "expressionTextArea",
+                            "required": false,
+                            "defaultValue": "${payload}",
+                            "description": ""
+                        },
+                        {
+                            "name": "requestBodyXml",
+                            "type": "expressionTextArea",
+                            "required": false,
+                            "defaultValue": "${xpath('$body/node()')}",
+                            "description": ""
+                        },
+                        {
+                            "name": "requestBodyText",
+                            "type": "expressionTextArea",
+                            "required": false,
+                            "defaultValue": "${xpath('$body/node()')}",
+                            "description": ""
+                        },
+                        {
+                            "name": "publisherConfirms",
+                            "type": "checkbox",
+                            "required": false,
+                            "defaultValue": true,
+                            "description": "Enable publisher confirms to ensure message delivery acknowledgment from the RabbitMQ broker."
+                        },
+                        {
+                            "name": "publishTimeout",
+                            "type": "stringOrExpression",
+                            "required": false,
+                            "defaultValue": "60000",
+                            "description": "The maximum time (in milliseconds) to wait for the message to be published before timing out."
+                        },
+                        {
+                            "name": "queueArguments",
+                            "type": "stringOrExpression",
+                            "required": false,
+                            "defaultValue": "",
+                            "description": "Additional arguments (comma-separated key=value pairs) to use when declaring the queue, e.g., for setting policy attributes like message-ttl or max-length."
+                        },
+                        {
+                            "name": "rabbitmq.classic.version",
+                            "type": "combo",
+                            "required": false,
+                            "defaultValue": "",
+                            "description": "For Classic Queues, select the queue version (V1 or V2). V2 offers better performance and scale. Supported values: V1, V2"
+                        },
+                        {
+                            "name": "maxPriority",
+                            "type": "stringOrExpression",
+                            "required": false,
+                            "defaultValue": "",
+                            "description": "For Classic Queues: the maximum priority level the queue should support (0-255). Requires setting 'x-max-priority' in queue arguments."
+                        },
+                        {
+                            "name": "initialMemberCount",
+                            "type": "stringOrExpression",
+                            "required": false,
+                            "defaultValue": "",
+                            "description": "For Quorum Queues: the initial number of replica nodes required for the queue."
+                        },
+                        {
+                            "name": "deliveryLimit",
+                            "type": "stringOrExpression",
+                            "required": false,
+                            "defaultValue": "",
+                            "description": "For Quorum Queues: the maximum number of times a message can be redelivered to a consumer before being dead-lettered."
+                        },
+                        {
+                            "name": "deadLetterStrategy",
+                            "type": "combo",
+                            "required": false,
+                            "defaultValue": "",
+                            "description": "For Quorum Queues: defines the acknowledgment and redelivery behavior for failed messages. Supported values: AT_LEAST_ONCE, AT_MOST_ONCE"
+                        },
+                        {
+                            "name": "initialMemberCount",
+                            "type": "stringOrExpression",
+                            "required": false,
+                            "defaultValue": "",
+                            "description": "For STREAM queues: the initial number of stream members. Leave blank for default."
+                        },
+                        {
+                            "name": "maxAge",
+                            "type": "stringOrExpression",
+                            "required": false,
+                            "defaultValue": "",
+                            "description": "For STREAM queues: the maximum retention time for stream data (e.g., '7d' for 7 days). Old messages will be discarded."
+                        },
+                        {
+                            "name": "maxSegmentSize",
+                            "type": "stringOrExpression",
+                            "required": false,
+                            "defaultValue": "",
+                            "description": "For STREAM queues: the maximum size (in bytes) of a single segment file within the stream storage."
+                        },
+                        {
+                            "name": "queueExclusive",
+                            "type": "checkbox",
+                            "required": false,
+                            "defaultValue": false,
+                            "description": "If enabled, the queue will be deleted when the connection that declared it closes. Only one consumer can use an exclusive queue."
+                        },
+                        {
+                            "name": "queueAutoDelete",
+                            "type": "checkbox",
+                            "required": false,
+                            "defaultValue": false,
+                            "description": "If enabled, the queue will be automatically deleted when the last consumer disconnects from it."
+                        },
+                        {
+                            "name": "queueOverflowStrategy",
+                            "type": "combo",
+                            "required": false,
+                            "defaultValue": "DROP_HEAD",
+                            "description": "Defines what happens when a queue reaches its maximum length: DROP_HEAD (oldest messages are discarded), REJECT_PUBLISH (new messages are rejected), or REJECT_PUBLISH_DLX (rejected and sent to the Dead Letter Exchange). Supported values: DROP_HEAD, REJECT_PUBLISH, REJECT_PUBLISH_DLX"
+                        },
+                        {
+                            "name": "exchangeArguments",
+                            "type": "stringOrExpression",
+                            "required": false,
+                            "defaultValue": "",
+                            "description": "Additional arguments (as comma-separated key=value pairs) to use when declaring the exchange."
+                        },
+                        {
+                            "name": "headerExchangeArguments",
+                            "type": "stringOrExpression",
+                            "required": false,
+                            "defaultValue": "",
+                            "description": "For HEADERS exchanges: set headers and values for the binding. Use `x-match=any` to match any header, or `x-match=all` to require all headers."
+                        },
+                        {
+                            "name": "exchangeAutoDelete",
+                            "type": "checkbox",
+                            "required": false,
+                            "defaultValue": false,
+                            "description": "If enabled, the exchange will be automatically deleted when the last queue is unbound from it."
+                        },
+                        {
+                            "name": "requestCharSet",
+                            "type": "stringOrExpression",
+                            "required": false,
+                            "defaultValue": "",
+                            "description": "The content encoding/character set (e.g., UTF-8) used for the message body if the encoding/character set cannot be determined from the request message."
+                        },
+                        {
+                            "name": "responseVariable",
+                            "type": "string",
+                            "required": true,
+                            "defaultValue": "",
+                            "description": "Name of the variable to which the output of the operation should be assigned"
+                        },
+                        {
+                            "name": "overwriteBody",
+                            "type": "checkbox",
+                            "required": false,
+                            "defaultValue": false,
+                            "description": "Replace the Message Body in Message Context with the output of the operation (This will remove the payload from the above variable)."
+                        }
+                    ],
+                    "isHidden": false
+                },
+                {
+                    "name": "requeue",
+                    "description": "Requeue",
+                    "params": [
+                        {
+                            "name": "responseVariable",
+                            "type": "string",
+                            "required": true,
+                            "defaultValue": "",
+                            "description": "Name of the variable to which the output of the operation should be assigned"
+                        },
+                        {
+                            "name": "overwriteBody",
+                            "type": "checkbox",
+                            "required": false,
+                            "defaultValue": "false",
+                            "description": "Replace the Message Body in Message Context with the output of the operation (This will remove the payload from the above variable)."
+                        }
+                    ],
+                    "isHidden": false
+                },
+                {
+                    "name": "sendRpc",
+                    "description": "Send RPC Request",
+                    "params": [
+                        {
+                            "name": "queue",
+                            "type": "stringOrExpression",
+                            "required": true,
+                            "defaultValue": "",
+                            "description": "The name of the Queue."
+                        },
+                        {
+                            "name": "queueType",
+                            "type": "combo",
+                            "required": true,
+                            "defaultValue": "QUORUM",
+                            "description": "Select the type of RabbitMQ queue to interact with: Classic, Quorum (for high availability), or Stream (for large, continuous message flows). Supported values: CLASSIC, QUORUM, STREAM"
+                        },
+                        {
+                            "name": "queueAutoDeclare",
+                            "type": "checkbox",
+                            "required": false,
+                            "defaultValue": true,
+                            "description": "If enabled, the connector will attempt to declare the specified queue on the RabbitMQ server if it doesn't already exist."
+                        },
+                        {
+                            "name": "replyToQueue",
+                            "type": "stringOrExpression",
+                            "required": true,
+                            "defaultValue": "",
+                            "description": "The name of the Reply-To Queue."
+                        },
+                        {
+                            "name": "replyToQueueType",
+                            "type": "combo",
+                            "required": true,
+                            "defaultValue": "QUORUM",
+                            "description": "Select the type of RabbitMQ queue to interact with: Classic, Quorum (for high availability), or Stream (for large, continuous message flows). Supported values: CLASSIC, QUORUM, STREAM"
+                        },
+                        {
+                            "name": "replyToQueueAutoDeclare",
+                            "type": "checkbox",
+                            "required": false,
+                            "defaultValue": true,
+                            "description": "If enabled, the connector will attempt to declare the specified queue on the RabbitMQ server if it doesn't already exist."
+                        },
+                        {
+                            "name": "requestBodyType",
+                            "type": "combo",
+                            "required": false,
+                            "defaultValue": "JSON",
+                            "description": "Supported values: JSON, XML, TEXT"
+                        },
+                        {
+                            "name": "requestBodyJson",
+                            "type": "expressionTextArea",
+                            "required": false,
+                            "defaultValue": "${payload}",
+                            "description": ""
+                        },
+                        {
+                            "name": "requestBodyXml",
+                            "type": "expressionTextArea",
+                            "required": false,
+                            "defaultValue": "${xpath('$body/node()')}",
+                            "description": ""
+                        },
+                        {
+                            "name": "requestBodyText",
+                            "type": "expressionTextArea",
+                            "required": false,
+                            "defaultValue": "${xpath('$body/node()')}",
+                            "description": ""
+                        },
+                        {
+                            "name": "requestTimeout",
+                            "type": "stringOrExpression",
+                            "required": false,
+                            "defaultValue": "60000",
+                            "description": "The maximum time (in milliseconds) to wait for sending the RPC request."
+                        },
+                        {
+                            "name": "responseBodyType",
+                            "type": "combo",
+                            "required": false,
+                            "defaultValue": "JSON",
+                            "description": "Set the desired content type for the response if the content type cannot be determined from the RabbitMQ response message. Supported values: JSON, XML, TEXT"
+                        },
+                        {
+                            "name": "queueArguments",
+                            "type": "stringOrExpression",
+                            "required": false,
+                            "defaultValue": "",
+                            "description": "Additional arguments (comma-separated key=value pairs) to use when declaring the queue, e.g., for setting policy attributes like message-ttl or max-length."
+                        },
+                        {
+                            "name": "rabbitmq.classic.version",
+                            "type": "combo",
+                            "required": false,
+                            "defaultValue": "",
+                            "description": "For Classic Queues, select the queue version (V1 or V2). V2 offers better performance and scale. Supported values: V1, V2"
+                        },
+                        {
+                            "name": "maxPriority",
+                            "type": "stringOrExpression",
+                            "required": false,
+                            "defaultValue": "",
+                            "description": "For Classic Queues: the maximum priority level the queue should support (0-255). Requires setting 'x-max-priority' in queue arguments."
+                        },
+                        {
+                            "name": "initialMemberCount",
+                            "type": "stringOrExpression",
+                            "required": false,
+                            "defaultValue": "",
+                            "description": "For Quorum Queues: the initial number of replica nodes required for the queue."
+                        },
+                        {
+                            "name": "deliveryLimit",
+                            "type": "stringOrExpression",
+                            "required": false,
+                            "defaultValue": "",
+                            "description": "For Quorum Queues: the maximum number of times a message can be redelivered to a consumer before being dead-lettered."
+                        },
+                        {
+                            "name": "deadLetterStrategy",
+                            "type": "combo",
+                            "required": false,
+                            "defaultValue": "",
+                            "description": "For Quorum Queues: defines the acknowledgment and redelivery behavior for failed messages. Supported values: AT_LEAST_ONCE, AT_MOST_ONCE"
+                        },
+                        {
+                            "name": "initialMemberCount",
+                            "type": "stringOrExpression",
+                            "required": false,
+                            "defaultValue": "",
+                            "description": "For STREAM queues: the initial number of stream members. Leave blank for default."
+                        },
+                        {
+                            "name": "maxAge",
+                            "type": "stringOrExpression",
+                            "required": false,
+                            "defaultValue": "",
+                            "description": "For STREAM queues: the maximum retention time for stream data (e.g., '7d' for 7 days). Old messages will be discarded."
+                        },
+                        {
+                            "name": "maxSegmentSize",
+                            "type": "stringOrExpression",
+                            "required": false,
+                            "defaultValue": "",
+                            "description": "For STREAM queues: the maximum size (in bytes) of a single segment file within the stream storage."
+                        },
+                        {
+                            "name": "queueExclusive",
+                            "type": "checkbox",
+                            "required": false,
+                            "defaultValue": false,
+                            "description": "If enabled, the queue will be deleted when the connection that declared it closes. Only one consumer can use an exclusive queue."
+                        },
+                        {
+                            "name": "queueAutoDelete",
+                            "type": "checkbox",
+                            "required": false,
+                            "defaultValue": false,
+                            "description": "If enabled, the queue will be automatically deleted when the last consumer disconnects from it."
+                        },
+                        {
+                            "name": "queueOverflowStrategy",
+                            "type": "combo",
+                            "required": false,
+                            "defaultValue": "DROP_HEAD",
+                            "description": "Defines what happens when a queue reaches its maximum length: DROP_HEAD (oldest messages are discarded), REJECT_PUBLISH (new messages are rejected), or REJECT_PUBLISH_DLX (rejected and sent to the Dead Letter Exchange). Supported values: DROP_HEAD, REJECT_PUBLISH, REJECT_PUBLISH_DLX"
+                        },
+                        {
+                            "name": "replyToQueueArguments",
+                            "type": "stringOrExpression",
+                            "required": false,
+                            "defaultValue": "",
+                            "description": "Additional arguments (comma-separated key=value pairs) to use when declaring the queue, e.g., for setting policy attributes like message-ttl or max-length."
+                        },
+                        {
+                            "name": "replyToQueueClassicVersion",
+                            "type": "combo",
+                            "required": false,
+                            "defaultValue": "",
+                            "description": "For Classic Queues, select the queue version (V1 or V2). V2 offers better performance and scale. Supported values: V1, V2"
+                        },
+                        {
+                            "name": "replyToQueueMaxPriority",
+                            "type": "stringOrExpression",
+                            "required": false,
+                            "defaultValue": "",
+                            "description": "For Classic Queues: the maximum priority level the queue should support (0-255). Requires setting 'x-max-priority' in queue arguments."
+                        },
+                        {
+                            "name": "replyToQueueInitialMemberCount",
+                            "type": "stringOrExpression",
+                            "required": false,
+                            "defaultValue": "",
+                            "description": "For Quorum Queues: the initial number of replica nodes required for the queue."
+                        },
+                        {
+                            "name": "replyToQueueDeliveryLimit",
+                            "type": "stringOrExpression",
+                            "required": false,
+                            "defaultValue": "",
+                            "description": "For Quorum Queues: the maximum number of times a message can be redelivered to a consumer before being dead-lettered."
+                        },
+                        {
+                            "name": "replyToQueueDeadLetterStrategy",
+                            "type": "combo",
+                            "required": false,
+                            "defaultValue": "",
+                            "description": "For Quorum Queues: defines the acknowledgment and redelivery behavior for failed messages. Supported values: AT_LEAST_ONCE, AT_MOST_ONCE"
+                        },
+                        {
+                            "name": "replyToQueueInitialMemberCount",
+                            "type": "stringOrExpression",
+                            "required": false,
+                            "defaultValue": "",
+                            "description": "For STREAM queues: the initial number of stream members. Leave blank for default."
+                        },
+                        {
+                            "name": "replyToQueueMaxAge",
+                            "type": "stringOrExpression",
+                            "required": false,
+                            "defaultValue": "",
+                            "description": "For STREAM queues: the maximum retention time for stream data (e.g., '7d' for 7 days). Old messages will be discarded."
+                        },
+                        {
+                            "name": "replyToQueueMaxSegmentSize",
+                            "type": "stringOrExpression",
+                            "required": false,
+                            "defaultValue": "",
+                            "description": "For STREAM queues: the maximum size (in bytes) of a single segment file within the stream storage."
+                        },
+                        {
+                            "name": "replyToQueueExclusive",
+                            "type": "checkbox",
+                            "required": false,
+                            "defaultValue": false,
+                            "description": "If enabled, the queue will be deleted when the connection that declared it closes. Only one consumer can use an exclusive queue."
+                        },
+                        {
+                            "name": "replyToQueueAutoDelete",
+                            "type": "checkbox",
+                            "required": false,
+                            "defaultValue": false,
+                            "description": "If enabled, the queue will be automatically deleted when the last consumer disconnects from it."
+                        },
+                        {
+                            "name": "replyToQueueOverflowStrategy",
+                            "type": "combo",
+                            "required": false,
+                            "defaultValue": "DROP_HEAD",
+                            "description": "Defines what happens when a queue reaches its maximum length: DROP_HEAD (oldest messages are discarded), REJECT_PUBLISH (new messages are rejected), or REJECT_PUBLISH_DLX (rejected and sent to the Dead Letter Exchange). Supported values: DROP_HEAD, REJECT_PUBLISH, REJECT_PUBLISH_DLX"
+                        },
+                        {
+                            "name": "requestCharSet",
+                            "type": "stringOrExpression",
+                            "required": false,
+                            "defaultValue": "",
+                            "description": "The content encoding/character set (e.g., UTF-8) used for the message body if the encoding/character set cannot be determined from the request message."
+                        },
+                        {
+                            "name": "responseCharSet",
+                            "type": "stringOrExpression",
+                            "required": false,
+                            "defaultValue": "",
+                            "description": "The content encoding/character set (e.g., UTF-8) used for the message body if the encoding/character set cannot be determined from the response message."
+                        },
+                        {
+                            "name": "responseVariable",
+                            "type": "string",
+                            "required": true,
+                            "defaultValue": "",
+                            "description": "Name of the variable to which the output of the operation should be assigned"
+                        },
+                        {
+                            "name": "overwriteBody",
+                            "type": "checkbox",
+                            "required": false,
+                            "defaultValue": "false",
+                            "description": "Replace the Message Body in Message Context with the output of the operation (This will remove the payload from the above variable)."
+                        }
+                    ],
+                    "isHidden": false
+                },
+                {
+                    "name": "accept",
+                    "description": "Accept",
+                    "params": [
+                        {
+                            "name": "responseVariable",
+                            "type": "string",
+                            "required": true,
+                            "defaultValue": "",
+                            "description": "Name of the variable to which the output of the operation should be assigned"
+                        },
+                        {
+                            "name": "overwriteBody",
+                            "type": "checkbox",
+                            "required": false,
+                            "defaultValue": "false",
+                            "description": "Replace the Message Body in Message Context with the output of the operation (This will remove the payload from the above variable)."
+                        }
+                    ],
+                    "isHidden": false
+                }
+            ],
+            "connections": [
+                {
+                    "name": "rabbitmq",
+                    "description": "RabbitMQ Connection",
+                    "params": [
+                        {
+                            "name": "connectionName",
+                            "type": "string",
+                            "required": true,
+                            "defaultValue": "RABBITMQ_CONNECTION_1",
+                            "description": "The name for the rabbitmq connection"
+                        },
+                        {
+                            "name": "serverUrls",
+                            "type": "stringOrExpression",
+                            "required": true,
+                            "defaultValue": "localhost:5672",
+                            "description": "Enter RabbitMQ server URLs as a comma-separated list (e.g., host1:port1,host2:port2)."
+                        },
+                        {
+                            "name": "saslMechanism",
+                            "type": "combo",
+                            "required": true,
+                            "defaultValue": "PLAIN",
+                            "description": "Select the SASL mechanism to use for connection authentication. Supported values: PLAIN, EXTERNAL"
+                        },
+                        {
+                            "name": "oAuth2Enabled",
+                            "type": "checkbox",
+                            "required": false,
+                            "defaultValue": false,
+                            "description": "Enable if using OAuth 2.0 (e.g., Client Credentials or Password Grant) for authentication instead of a simple username/password."
+                        },
+                        {
+                            "name": "username",
+                            "type": "stringOrExpression",
+                            "required": false,
+                            "defaultValue": "guest",
+                            "description": "Username for PLAIN authentication."
+                        },
+                        {
+                            "name": "password",
+                            "type": "stringOrExpression",
+                            "required": false,
+                            "defaultValue": "guest",
+                            "description": "Password for PLAIN authentication."
+                        },
+                        {
+                            "name": "tokenEndpoint",
+                            "type": "stringOrExpression",
+                            "required": false,
+                            "defaultValue": "",
+                            "description": "Enter Identity Provider/Token Service token endpoint URL to generate the access token."
+                        },
+                        {
+                            "name": "grantType",
+                            "type": "combo",
+                            "required": false,
+                            "defaultValue": "client_credentials",
+                            "description": "Select the grant type to use for token generation. Supported values: client_credentials, password"
+                        },
+                        {
+                            "name": "clientId",
+                            "type": "stringOrExpression",
+                            "required": false,
+                            "defaultValue": "",
+                            "description": "The client ID for token generation."
+                        },
+                        {
+                            "name": "clientSecret",
+                            "type": "stringOrExpression",
+                            "required": false,
+                            "defaultValue": "",
+                            "description": "The client secret for token generation."
+                        },
+                        {
+                            "name": "oAuth2UserName",
+                            "type": "stringOrExpression",
+                            "required": false,
+                            "defaultValue": "",
+                            "description": "Enter the username to use with password grant type for token generation."
+                        },
+                        {
+                            "name": "oAuth2Password",
+                            "type": "stringOrExpression",
+                            "required": false,
+                            "defaultValue": "",
+                            "description": "Enter the password to use with password grant type for token generation"
+                        },
+                        {
+                            "name": "sslEnabled",
+                            "type": "checkbox",
+                            "required": false,
+                            "defaultValue": false,
+                            "description": "Enable SSL/TLS for the RabbitMQ connection."
+                        },
+                        {
+                            "name": "trustEverything",
+                            "type": "checkbox",
+                            "required": false,
+                            "defaultValue": false,
+                            "description": "If enabled, all server certificates will be accepted, regardless of validity. **Not recommended for production environments.**"
+                        },
+                        {
+                            "name": "keyStoreLocation",
+                            "type": "stringOrExpression",
+                            "required": false,
+                            "defaultValue": "",
+                            "description": "The file path to the Keystore containing the client's private key and certificate."
+                        },
+                        {
+                            "name": "keyStoreType",
+                            "type": "stringOrExpression",
+                            "required": false,
+                            "defaultValue": "JKS",
+                            "description": "The type of the Keystore (e.g., JKS)."
+                        },
+                        {
+                            "name": "keyStorePassword",
+                            "type": "stringOrExpression",
+                            "required": false,
+                            "defaultValue": "",
+                            "description": "The password to access the Keystore."
+                        },
+                        {
+                            "name": "trustStoreLocation",
+                            "type": "stringOrExpression",
+                            "required": false,
+                            "defaultValue": "",
+                            "description": "The file path to the Truststore containing trusted server certificates."
+                        },
+                        {
+                            "name": "trustStoreType",
+                            "type": "stringOrExpression",
+                            "required": false,
+                            "defaultValue": "JKS",
+                            "description": "The type of the Truststore (e.g., JKS)."
+                        },
+                        {
+                            "name": "trustStorePassword",
+                            "type": "stringOrExpression",
+                            "required": false,
+                            "defaultValue": "",
+                            "description": "The password to access the Truststore."
+                        },
+                        {
+                            "name": "sslVersion",
+                            "type": "stringOrExpression",
+                            "required": false,
+                            "defaultValue": "TLSv1.2",
+                            "description": "The preferred SSL/TLS protocol version (e.g., 'TLSv1.2', 'TLSv1.3')."
+                        },
+                        {
+                            "name": "hostnameVerificationEnabled",
+                            "type": "checkbox",
+                            "required": false,
+                            "defaultValue": false,
+                            "description": "If enabled, the hostname in the server's certificate must match the server host name you are connecting to."
+                        },
+                        {
+                            "name": "virtualHost",
+                            "type": "stringOrExpression",
+                            "required": false,
+                            "defaultValue": "",
+                            "description": "The virtual host (vhost) within the RabbitMQ server to connect to. Leave blank for the default '/' vhost."
+                        },
+                        {
+                            "name": "connectionIdleTimeout",
+                            "type": "stringOrExpression",
+                            "required": false,
+                            "defaultValue": "",
+                            "description": "The maximum period (in milliseconds) the connection can remain idle without any activity before it is closed by the server."
+                        },
+                        {
+                            "name": "connectionEstablishRetryCount",
+                            "type": "stringOrExpression",
+                            "required": false,
+                            "defaultValue": "",
+                            "description": "The number of times to retry establishing the connection to the RabbitMQ server. Leave blank for default."
+                        },
+                        {
+                            "name": "connectionEstablishRetryInterval",
+                            "type": "stringOrExpression",
+                            "required": false,
+                            "defaultValue": "",
+                            "description": "The interval (in milliseconds) between retries when establishing the connection."
+                        },
+                        {
+                            "name": "connectionRecoveryPolicyType",
+                            "type": "combo",
+                            "required": false,
+                            "defaultValue": "FIXED_WITH_INITIAL_DELAY_AND_TIMEOUT",
+                            "description": "Defines the strategy for automatic connection recovery after a disconnection. Supported values: FIXED, FIXED_WITH_INITIAL_DELAY, FIXED_WITH_INITIAL_DELAY_AND_TIMEOUT"
+                        },
+                        {
+                            "name": "connectionRecoveryInitialDelay",
+                            "type": "stringOrExpression",
+                            "required": false,
+                            "defaultValue": "",
+                            "description": "The initial delay (in milliseconds) before the first recovery attempt starts."
+                        },
+                        {
+                            "name": "connectionRecoveryInterval",
+                            "type": "stringOrExpression",
+                            "required": false,
+                            "defaultValue": "",
+                            "description": "The fixed interval (in milliseconds) between connection recovery retries."
+                        },
+                        {
+                            "name": "connectionRecoveryTimeout",
+                            "type": "stringOrExpression",
+                            "required": false,
+                            "defaultValue": "",
+                            "description": "The total time (in milliseconds) allowed for the connection recovery process before giving up."
+                        }
+                    ]
+                }
+            ]
+        },
+        {
             "tagName": "v1.0.0",
             "products": [
                 "MI 4.6.0"
