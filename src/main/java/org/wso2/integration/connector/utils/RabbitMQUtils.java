@@ -228,18 +228,20 @@ public class RabbitMQUtils {
     /**
      * Builds a JSON response indicating an error during the operation.
      *
+     * @param messageId      The ID of the message.
      * @param messageContext The message context associated with the error.
      * @param e              The exception that occurred.
      * @param error          The error details to include in the response.
      * @return A JSON object containing the error details.
      */
-    public static JsonObject buildErrorResponse(MessageContext messageContext, Throwable e, Error error) {
+    public static JsonObject buildErrorResponse(String messageId, MessageContext messageContext, Throwable e, Error error) {
 
         // Create a new JSON payload
         JsonObject resultJson = new JsonObject();
 
         // Add the basic success information
         resultJson.addProperty("success", "false");
+        resultJson.addProperty("messageId", messageId);
 
         JsonObject errorJson = new JsonObject();
 
@@ -707,6 +709,8 @@ public class RabbitMQUtils {
                 ConnectorUtils.lookupTemplateParamater(messageContext, QUEUE_ARGUMENTS));
         setPropertyIfNotNull(rabbitmqProperties, QUEUE_EXCLUSIVE,
                 ConnectorUtils.lookupTemplateParamater(messageContext, QUEUE_EXCLUSIVE));
+        setPropertyIfNotNull(rabbitmqProperties, ROUTING_KEY,
+                ConnectorUtils.lookupTemplateParamater(messageContext, ROUTING_KEY));
         setPropertyIfNotNull(rabbitmqProperties, CLASSIC_MAX_PRIORITY,
                 ConnectorUtils.lookupTemplateParamater(messageContext, CLASSIC_MAX_PRIORITY));
         setPropertyIfNotNull(rabbitmqProperties, CLASSIC_VERSION,

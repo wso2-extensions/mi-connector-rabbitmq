@@ -210,7 +210,7 @@ public class PublishMessage extends AbstractConnectorOperation {
                             handleConnectorResponse(
                                     messageContext, responseVariable, false,
                                     RabbitMQUtils.buildErrorResponse(
-                                            messageContext, throwable.getCause(), Error.OPERATION_ERROR),
+                                            messageID, messageContext, throwable.getCause(), Error.OPERATION_ERROR),
                                     null, null);
                         } else {
                             errorDetail = "Error occurred while performing rabbitmq:publishMessage "
@@ -264,7 +264,7 @@ public class PublishMessage extends AbstractConnectorOperation {
     private void handleError(MessageContext msgCtx, Exception e, Error error, String errorDetail,
                              String responseVariable) {
 
-        JsonObject resultJSON = RabbitMQUtils.buildErrorResponse(msgCtx, e, error);
+        JsonObject resultJSON = RabbitMQUtils.buildErrorResponse(msgCtx.getMessageID(), msgCtx, e, error);
         handleConnectorResponse(msgCtx, responseVariable, false, resultJSON, null, null);
         handleException(errorDetail, e, msgCtx);
     }
@@ -285,9 +285,9 @@ public class PublishMessage extends AbstractConnectorOperation {
                                    String exchangeType, String routingKey,
                                    Connection clientConnection, RabbitMQConnection connection) {
         ClientKey key = new ClientKey(queue, exchange, routingKey, null);
-        if (queue == null && exchange == null && routingKey == null) {
+        if (queue == null && exchange == null) {
             throw new SynapseException("Publisher client initialization failed due to insufficient information." +
-                    " Provide at least one: Queue, Exchange, or Routing Key.");
+                    " Provide at least one: Queue or Exchange.");
         }
         if (exchangeType == null) {
             exchangeType = DEFAULT_EXCHANGE_TYPE;
@@ -307,8 +307,7 @@ public class PublishMessage extends AbstractConnectorOperation {
 
                 if (queue != null) {
                     builder.queue(queue);
-                }
-                if (exchange != null) {
+                } else {
                     builder.exchange(exchange);
                     if (routingKey != null) {
                         builder.key(routingKey);
