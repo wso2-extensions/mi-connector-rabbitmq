@@ -16,7 +16,7 @@
     ],
     "releases": [
         {
-            "tagName": "v1.0.0",
+            "tagName": "v1.0.1",
             "products": [
                 "MI 4.6.0"
             ],
@@ -51,13 +51,13 @@
                             "type": "stringOrExpression",
                             "required": false,
                             "defaultValue": "",
-                            "description": "The name of the Queue."
+                            "description": "Specify the name of the RabbitMQ queue to publish to."
                         },
                         {
                             "name": "queueType",
                             "type": "combo",
                             "required": false,
-                            "defaultValue": "CLASSIC",
+                            "defaultValue": "QUORUM",
                             "description": "Select the type of RabbitMQ queue to interact with: Classic, Quorum (for high availability), or Stream (for large, continuous message flows). Supported values: CLASSIC, QUORUM, STREAM"
                         },
                         {
@@ -72,14 +72,14 @@
                             "type": "stringOrExpression",
                             "required": false,
                             "defaultValue": "",
-                            "description": "The name of the exchange to bind the queue to. Leave empty to publish directly to the queue via default exchange."
+                            "description": "Specify exchange name and routing key to publish message via an exchange instead of a queue. If using an exchange, leave queue blank\u2014the routing key controls message delivery based on exchange type."
                         },
                         {
                             "name": "exchangeType",
                             "type": "combo",
                             "required": false,
                             "defaultValue": "DIRECT",
-                            "description": "The type of the RabbitMQ exchange: **DIRECT**, **FANOUT** (broadcast), **TOPIC** (wildcard routing), or **HEADERS** (attribute matching). Supported values: DIRECT, FANOUT, TOPIC, HEADERS"
+                            "description": "The type of the RabbitMQ exchange: DIRECT, FANOUT (broadcast), TOPIC (wildcard routing), or HEADERS (attribute matching). Supported values: DIRECT, FANOUT, TOPIC, HEADERS"
                         },
                         {
                             "name": "exchangeAutoDeclare",
@@ -93,7 +93,7 @@
                             "type": "stringOrExpression",
                             "required": false,
                             "defaultValue": "",
-                            "description": "Specify a routing key when binding a queue to a **DIRECT** or **TOPIC** exchange. If omitted, the queue name will be used as the routing key."
+                            "description": "Specify a routing key when binding a queue to a DIRECT or TOPIC exchange. If omitted, the queue name will be used as the routing key."
                         },
                         {
                             "name": "requestBodyType",
@@ -219,7 +219,7 @@
                             "type": "combo",
                             "required": false,
                             "defaultValue": "DROP_HEAD",
-                            "description": "Defines what happens when a queue reaches its maximum length: **DROP_HEAD** (oldest messages are discarded), **REJECT_PUBLISH** (new messages are rejected), or **REJECT_PUBLISH_DLX** (rejected and sent to the Dead Letter Exchange). Supported values: DROP_HEAD, REJECT_PUBLISH, REJECT_PUBLISH_DLX"
+                            "description": "Defines what happens when a queue reaches its maximum length: DROP_HEAD (oldest messages are discarded), REJECT_PUBLISH (new messages are rejected), or REJECT_PUBLISH_DLX (rejected and sent to the Dead Letter Exchange). Supported values: DROP_HEAD, REJECT_PUBLISH, REJECT_PUBLISH_DLX"
                         },
                         {
                             "name": "exchangeArguments",
@@ -233,7 +233,7 @@
                             "type": "stringOrExpression",
                             "required": false,
                             "defaultValue": "",
-                            "description": "For **HEADERS** exchanges: set headers and values for the binding. Use `x-match=any` to match any header, or `x-match=all` to require all headers."
+                            "description": "For HEADERS exchanges: set headers and values for the binding. Use `x-match=any` to match any header, or `x-match=all` to require all headers."
                         },
                         {
                             "name": "exchangeAutoDelete",
@@ -457,7 +457,7 @@
                             "type": "combo",
                             "required": false,
                             "defaultValue": "DROP_HEAD",
-                            "description": "Defines what happens when a queue reaches its maximum length: **DROP_HEAD** (oldest messages are discarded), **REJECT_PUBLISH** (new messages are rejected), or **REJECT_PUBLISH_DLX** (rejected and sent to the Dead Letter Exchange). Supported values: DROP_HEAD, REJECT_PUBLISH, REJECT_PUBLISH_DLX"
+                            "description": "Defines what happens when a queue reaches its maximum length: DROP_HEAD (oldest messages are discarded), REJECT_PUBLISH (new messages are rejected), or REJECT_PUBLISH_DLX (rejected and sent to the Dead Letter Exchange). Supported values: DROP_HEAD, REJECT_PUBLISH, REJECT_PUBLISH_DLX"
                         },
                         {
                             "name": "replyToQueueArguments",
@@ -541,7 +541,7 @@
                             "type": "combo",
                             "required": false,
                             "defaultValue": "DROP_HEAD",
-                            "description": "Defines what happens when a queue reaches its maximum length: **DROP_HEAD** (oldest messages are discarded), **REJECT_PUBLISH** (new messages are rejected), or **REJECT_PUBLISH_DLX** (rejected and sent to the Dead Letter Exchange). Supported values: DROP_HEAD, REJECT_PUBLISH, REJECT_PUBLISH_DLX"
+                            "description": "Defines what happens when a queue reaches its maximum length: DROP_HEAD (oldest messages are discarded), REJECT_PUBLISH (new messages are rejected), or REJECT_PUBLISH_DLX (rejected and sent to the Dead Letter Exchange). Supported values: DROP_HEAD, REJECT_PUBLISH, REJECT_PUBLISH_DLX"
                         },
                         {
                             "name": "requestCharSet",
