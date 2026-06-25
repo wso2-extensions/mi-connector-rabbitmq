@@ -29,6 +29,7 @@
     <parameter name="clientSecret" description="The client secret for token generation."/>
     <parameter name="oAuth2UserName" description="The username required for the **password** grant type."/>
     <parameter name="oAuth2Password" description="The password required for the **password** grant type."/>
+    <parameter name="scope" description="Scopes to include in the OAuth 2.0 token request (space-separated if multiple)."/>
     <parameter name="sslEnabled" description="Enable SSL/TLS for the RabbitMQ connection."/>
     <parameter name="trustEverything" description="Accept all server certificates, regardless of validity. **Not recommended for production.**"/>
     <parameter name="keyStoreLocation" description="The file path to the Keystore containing the client's private key and certificate."/>
@@ -60,6 +61,7 @@
         <property expression="$func:clientSecret" name="clientSecret"/>
         <property expression="$func:oAuth2UserName" name="oAuth2UserName"/>
         <property expression="$func:oAuth2Password" name="oAuth2Password"/>
+        <property expression="$func:scope" name="scope"/>
         <property expression="$func:sslEnabled" name="sslEnabled"/>
         <property expression="$func:trustEverything" name="trustEverything"/>
         <property expression="$func:keyStoreLocation" name="keyStoreLocation"/>

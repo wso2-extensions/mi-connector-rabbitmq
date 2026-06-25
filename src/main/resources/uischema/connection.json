@@ -180,6 +180,18 @@
               "helpTip": "Enter the password to use with password grant type for token generation",
               "placeholder": "oauth2_password"
             }
+          },
+          {
+            "type": "attribute",
+            "value": {
+              "name": "scope",
+              "displayName": "Scope",
+              "inputType": "stringOrExpression",
+              "defaultValue": "",
+              "required": "false",
+              "enableCondition": [{"oAuth2Enabled": true}],
+              "placeholder": "scope1 scope2"
+            }
           }
         ]
       }

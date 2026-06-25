@@ -230,6 +230,8 @@ public class RabbitMQConfig extends AbstractConnector implements ManagedLifecycl
             oAuth2Config.setPassword(
                     (String) getParameter(messageContext, RabbitMQConstants.OAUTH2_PASSWORD));
         }
+        oAuth2Config.setScope(
+                (String) getParameter(messageContext, RabbitMQConstants.OAUTH2_SCOPE));
         configuration.setOAuth2Config(oAuth2Config);
     }
 

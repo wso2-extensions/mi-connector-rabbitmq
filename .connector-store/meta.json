@@ -686,6 +686,13 @@
                             "description": "Enter the password to use with password grant type for token generation"
                         },
                         {
+                            "name": "scope",
+                            "type": "stringOrExpression",
+                            "required": false,
+                            "defaultValue": "",
+                            "description": "Scopes to include in the OAuth 2.0 token request (space-separated if multiple)."
+                        },
+                        {
                             "name": "sslEnabled",
                             "type": "checkbox",
                             "required": false,

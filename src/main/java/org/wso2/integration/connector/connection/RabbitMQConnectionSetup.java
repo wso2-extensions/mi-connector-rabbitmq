@@ -59,6 +59,7 @@ import static org.wso2.integration.connector.utils.RabbitMQConstants.SERVER_TRUS
 import static org.wso2.integration.connector.utils.RabbitMQConstants.SERVER_URLS;
 import static org.wso2.integration.connector.utils.RabbitMQConstants.TOKEN_ENDPOINT;
 import static org.wso2.integration.connector.utils.RabbitMQConstants.VIRTUAL_HOST;
+import static org.wso2.integration.connector.utils.RabbitMQConstants.SCOPE_PARAMETER;
 
 /**
  * This class is responsible for setting up and managing RabbitMQ connections.
@@ -211,6 +212,9 @@ public class RabbitMQConnectionSetup {
                 connectionSettings.oauth2()::clientSecret
         );
 
+        if (StringUtils.isNotBlank(oAuth2Config.getScope())) {
+            connectionSettings.oauth2().parameter(SCOPE_PARAMETER, oAuth2Config.getScope());
+        }
         connectionSettings.oauth2().grantType(oAuth2Config.getGrantType());
 
         // Set username and password for password grant type

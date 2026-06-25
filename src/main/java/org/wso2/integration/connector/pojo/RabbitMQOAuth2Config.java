@@ -36,6 +36,7 @@ public class RabbitMQOAuth2Config {
     private String clientSecret;
     private String userName;
     private String password;
+    private String scope;
 
     /**
      * Retrieves the token endpoint for OAuth2 authentication.
@@ -177,5 +178,36 @@ public class RabbitMQOAuth2Config {
             throw new RabbitMQConnectorException("Mandatory parameter 'password' is not " +
                     "set for the 'password' grant type.");
         }
+    }
+
+    /**
+     * Retrieves the scope for OAuth2 authentication.
+     *
+     * @return The scope.
+     */
+    public String getScope() {
+        return scope;
+    }
+
+    /**
+     * Sets the scope for OAuth2 authentication.
+     * Scope is optional; when provided, it must be a space-delimited list of scope tokens.
+     *
+     * @param scope The scope value (optional).
+     * @throws RabbitMQConnectorException If the scope has an invalid format.
+     */
+    public void setScope(String scope) throws RabbitMQConnectorException {
+        String normalizedScope = StringUtils.trimToNull(scope);
+        if (normalizedScope == null) {
+            this.scope = null;
+            return;
+        }
+
+        // RFC 6749: scope is a space-delimited list of tokens; tokens must not contain SP, DQUOTE or "\\".
+        if (!normalizedScope.matches("^[\\S]+([ ][\\S]+)*$")) {
+            throw new RabbitMQConnectorException("Parameter 'scope' has an invalid format.");
+        }
+
+        this.scope = normalizedScope;
     }
 }

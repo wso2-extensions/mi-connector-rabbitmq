@@ -46,6 +46,8 @@ public class RabbitMQConstants {
     public static final String CLIENT_SECRET = "clientSecret";
     public static final String OAUTH2_USERNAME = "oAuth2UserName";
     public static final String OAUTH2_PASSWORD = "oAuth2Password";
+    public static final String OAUTH2_SCOPE = "scope";
+    public static final String SCOPE_PARAMETER = "scope";
     public static final String DEFAULT_SASL_MECHANISM = "PLAIN";
     public static final String OAUTH2_PASSWORD_GRANT_TYPE = "password";
     public static final String DEFAULT_OAUTH2_GRANT_TYPE = "client_credentials";
